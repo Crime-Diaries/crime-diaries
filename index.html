@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Crime Diaries</title>
+<meta name="description" content="The open encyclopedia of crime and forensics: famous cases from around the world.">
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Cinzel:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<div id="intro" hidden><canvas id="intro-c"></canvas><div class="crt"></div><div class="intro-ctl"><button id="snd" aria-pressed="false">SOUND OFF</button><button id="skip">SKIP INTRO ›</button></div></div>
+
+<header class="nav"><div class="wrap">
+  <a class="brand" href="index.html" aria-label="Crime Diaries home"><canvas id="mini-eye" aria-hidden="true"></canvas>CRIME DIARIES</a>
+  <nav><a href="#cases">Cases</a><a href="#forensics">Forensics</a><a href="#community">Community</a></nav>
+  <button class="ghost" id="replay">Replay intro</button>
+</div></header>
+
+<main>
+<section class="hero">
+  <canvas id="hero-eye" aria-hidden="true"></canvas><div class="crt"></div>
+  <div class="hero-copy">
+    <p class="kicker">The open encyclopedia of crime &amp; forensics</p>
+    <h1>Every crime. Every case. Every secret.</h1>
+    <form class="search" id="search" role="search"><input id="q" type="search" placeholder="Search cases, places, forensics…" aria-label="Search cases" autocomplete="off"><button>SEARCH</button></form>
+    <p class="eye-line" id="eye-line" aria-live="polite">The Eye is watching. Move your cursor.</p>
+  </div>
+</section>
+
+<section class="block" id="cases"><div class="wrap">
+  <div class="sec-head">
+    <div><h2>CASE FILES</h2><p>Famous cases from around the world, solved and unsolved.</p></div>
+    <div class="filters">
+      <select id="f-country" aria-label="Country"></select>
+      <select id="f-decade" aria-label="Decade"></select>
+      <select id="f-type" aria-label="Crime type"></select>
+      <select id="f-status" aria-label="Status"></select>
+    </div>
+  </div>
+  <p class="count" id="count"></p>
+  <div class="grid" id="grid"></div>
+</div></section>
+
+<section class="block" id="forensics"><div class="wrap">
+  <div class="sec-head"><div><h2>FORENSICS</h2><p>The science that cracked these cases, and the cases each method touched.</p></div></div>
+  <div class="fgrid" id="fgrid"></div>
+</div></section>
+
+<section class="block" id="community"><div class="wrap">
+  <div class="sec-head"><div><h2>COMMUNITY</h2><p>Discuss every case, and ask the Eye.</p></div></div>
+  <div class="soon">
+    <div><span class="tag">ON EVERY CASE</span><h3>Comments &amp; theories</h3><p>Open any case file and scroll to Discussion. Facts and speculation are kept apart: theories live in their own tab and are labelled as theories.</p>
+      <ul><li>Never name a living person as guilty unless a court has convicted them.</li><li>Respect victims and their families.</li><li>Cite a source for any claim of fact.</li></ul></div>
+    <div><span class="tag">BOTTOM RIGHT</span><h3>Ask the Eye</h3><p>Ask about a case, a place, a decade or a forensic method, and the Eye searches the case files for you. If something isn't in the records, it says so instead of guessing.</p><p><button class="ghost" onclick="AskEye.open()">Ask the Eye now</button></p></div>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">Crime Diaries prototype. Case summaries are original text; sources are listed on each case. Content on this site is about real people: treat it with care.</div></footer>
+
+<script src="data/cases.js"></script>
+<script src="js/eye.js"></script>
+<script src="js/intro.js"></script>
+<script src="js/site.js"></script>
+<script src="js/ask.js"></script>
+</body>
+</html>

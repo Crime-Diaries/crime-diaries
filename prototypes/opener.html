@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Crime Diaries — Opener</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Cinzel:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #060405;
+      --ink: #e8d8d4;
+      --red: #d4101f;
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px)
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #060405
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #060405
+    }
+
+    html {
+      scroll-padding-top: env(safe-area-inset-top, 0px)
+    }
+
+    html,
+    body {
+      margin: 0;
+      height: 100%;
+      background: var(--bg);
+      overflow: hidden;
+      font-family: "Permanent Marker", Impact, sans-serif
+    }
+
+    canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block
+    }
+
+    #crt {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .3) 0 1px, transparent 1px 3px);
+      box-shadow: inset 0 0 170px rgba(0, 0, 0, .85);
+      animation: fl 5s steps(1) infinite
+    }
+
+    @keyframes fl {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      41% {
+        opacity: .82
+      }
+
+      43% {
+        opacity: 1
+      }
+
+      77% {
+        opacity: .9
+      }
+
+      78% {
+        opacity: 1
+      }
+    }
+
+    #enter {
+      position: fixed;
+      z-index: 3;
+      left: 50%;
+      bottom: 20vh;
+      transform: translateX(-50%);
+      display: none;
+      background: rgba(20, 0, 4, .6);
+      color: #ff3b3b;
+      border: 2px solid var(--red);
+      padding: 12px 26px;
+      font: inherit;
+      font-size: 18px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      animation: bl 1.1s steps(1) infinite
+    }
+
+    #enter:hover {
+      background: var(--red);
+      color: #fff
+    }
+
+    @keyframes bl {
+      50% {
+        border-color: transparent
+      }
+    }
+
+    #rp {
+      z-index: 3
+    }
+
+    #lp,
+    #db {
+      position: fixed;
+      inset: 0;
+      z-index: 4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .7s;
+      background: rgba(7, 5, 9, .95);
+      backdrop-filter: blur(8px);
+      font-family: 'JetBrains Mono', monospace;
+      color: #e2e8f0
+    }
+
+    #lp.on,
+    #db.on {
+      opacity: 1;
+      pointer-events: auto
+    }
+
+    .card {
+      width: min(92vw, 420px);
+      background: #110d16;
+      border: 1px solid rgba(88, 28, 135, .6);
+      border-radius: 14px;
+      padding: 30px;
+      box-shadow: 0 20px 60px #000;
+      text-align: center
+    }
+
+    .card h2,
+    #db h2 {
+      font-family: Cinzel, serif;
+      letter-spacing: .12em;
+      margin: 8px 0 2px
+    }
+
+    .lock {
+      width: 48px;
+      height: 48px;
+      line-height: 48px;
+      margin: 0 auto;
+      border-radius: 50%;
+      background: #450a0a;
+      border: 1px solid #b91c1c;
+      font-size: 20px
+    }
+
+    .m {
+      font-size: 10px;
+      color: #c4a8f0;
+      text-decoration: none;
+      display: block
+    }
+
+    .card label {
+      display: block;
+      font-size: 11px;
+      margin: 14px 0 4px;
+      text-align: left
+    }
+
+    .card input {
+      width: 100%;
+      box-sizing: border-box;
+      background: #1b1524;
+      border: 1px solid rgba(88, 28, 135, .6);
+      border-radius: 8px;
+      padding: 10px;
+      color: #e2e8f0;
+      font: inherit
+    }
+
+    .card input:focus {
+      outline: 0;
+      border-color: #dc2626
+    }
+
+    .go {
+      width: 100%;
+      margin: 18px 0 12px;
+      padding: 12px;
+      border: 0;
+      border-radius: 8px;
+      color: #fff;
+      font: 700 13px Cinzel, serif;
+      letter-spacing: .08em;
+      cursor: pointer;
+      background: linear-gradient(90deg, #b91c1c, #6b21a8)
+    }
+
+    #db {
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: stretch;
+      padding: 24px;
+      overflow: auto;
+      z-index: 5;
+      background: #050308
+    }
+
+    .dh {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(88, 28, 135, .5);
+      padding-bottom: 14px;
+      margin-bottom: 18px
+    }
+
+    .lk {
+      background: #450a0a;
+      color: #fecaca;
+      border: 1px solid #991b1b;
+      border-radius: 6px;
+      padding: 7px 12px;
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 18px
+    }
+
+    .cs,
+    .enc {
+      background: #110d16;
+      border: 1px solid rgba(88, 28, 135, .4);
+      border-radius: 12px;
+      padding: 16px
+    }
+
+    .cs b {
+      color: #f87171;
+      font-size: 12px
+    }
+
+    .cs h3,
+    .enc h3 {
+      font-family: Cinzel, serif;
+      margin: 6px 0
+    }
+
+    .cs p,
+    .enc p {
+      font-size: 12px;
+      color: #94a3b8;
+      margin: 6px 0 0
+    }
+
+    .cs i {
+      font-style: normal
+    }
+
+    .enc {
+      text-align: center;
+      padding: 40px 16px
+    }
+
+    #rp {
+      position: fixed;
+      left: 14px;
+      bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+      background: transparent;
+      color: var(--ink);
+      border: 2px solid var(--red);
+      border-radius: 4px;
+      padding: 6px 14px;
+      font: inherit;
+      font-size: 14px;
+      cursor: pointer;
+      opacity: .7
+    }
+
+    #rp:hover {
+      opacity: 1;
+      background: var(--red)
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="c"></canvas>
+  <div id="crt"></div>
+  <button id="rp">Replay</button>
+  <div id="lp">
+    <div class="card">
+      <div class="lock">&#128274;</div>
+      <h2>CRIME DIARIES</h2>
+      <p class="m">RESTRICTED DATABASE // LEVEL 4 CLEARANCE REQUIRED</p>
+      <form id="lf"><label>INVESTIGATOR ID / EMAIL</label><input id="un" required
+          placeholder="detective@crimediaries.sec"><label>ENCRYPTION PASSWORD</label><input id="pw" type="password"
+          required placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"><button class="go">AUTHENTICATE &amp;
+          ACCESS ARCHIVES &rarr;</button></form>
+      <a href="#" id="rpl" class="m">Replay Cinematic Intro</a>
+    </div>
+  </div>
+  <div id="db">
+    <div class="dh">
+      <div>
+        <h2>CRIME DIARIES // ACTIVE ARCHIVES</h2><span class="m">SECURE SESSION ACTIVE // USER: <span
+            id="cu">DETECTIVE</span></span>
+      </div><button id="lock" class="lk">Lock Session</button>
+    </div>
+    <div class="grid">
+      <div class="cs"><b>CASE #001</b>
+        <h3>DOMESTIC ASSAULT</h3>
+        <p>Status: <i style="color:#fbbf24">UNDER INVESTIGATION</i></p>
+      </div>
+      <div class="cs"><b>CASE #002</b>
+        <h3>HOMICIDE DOSSIER</h3>
+        <p>Status: <i style="color:#ef4444">CLASSIFIED // EYES ONLY</i></p>
+      </div>
+      <div class="cs"><b>CASE #003</b>
+        <h3>ABDUCTION RECORDS</h3>
+        <p>Status: <i style="color:#34d399">ARCHIVED</i></p>
+      </div>
+    </div>
+    <div class="enc">
+      <h3>DATABASE ENCRYPTED</h3>
+      <p>Select an active dossier from the archives above or upload new forensic evidence to begin investigation.</p>
+    </div>
+  </div>
+  <script>
+    const TILT = 30 * Math.PI / 180; /* eye scene rotation (degrees → radians); flip the sign in draw() to tilt the other way */
+    /* The scene is drawn on a hidden canvas, then converted to colored ASCII on the visible one */
+    const cv = document.getElementById('c'), out = cv.getContext('2d');
+    const off = document.createElement('canvas'), ctx = off.getContext('2d', { willReadFrequently: true });
+    const S = 4; let W, H, u, dpr, COLS, ROWS, CW, CH, SX, SY;
+    function size() {
+      dpr = Math.min(devicePixelRatio || 1, 2);
+      COLS = Math.max(80, Math.min(190, Math.floor(innerWidth / 6.5))); CW = innerWidth / COLS; CH = CW * 1.8; ROWS = Math.floor(innerHeight / CH);
+      W = innerWidth; H = ROWS * CH; u = Math.min(W, H) / 800;
+      cv.width = innerWidth * dpr; cv.height = innerHeight * dpr;
+      off.width = COLS * S; off.height = ROWS * S; SX = S / CW; SY = S / CH;
+    }
+
+    const sm = t => t * t * (3 - 2 * t), cl = (x, a = 0, b = 1) => x < a ? a : x > b ? b : x, R = (a, b, k) => a + (b - a) * k;
+    const ss = (a, b, x) => sm(cl((x - a) / (b - a))), ease = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    const back = t => { t = cl(t); const c = 1.9; return 1 + (c + 1) * Math.pow(t - 1, 3) + c * Math.pow(t - 1, 2) };
+    let seed = 11; const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647 };
+    const RED = '#d4101f', BUBRED = '#a30c17', DARK = '#1a0004', P = (x, y) => ({ x, y });
+
+    /* halftone dot pattern for the bubbles */
+    const dot = document.createElement('canvas'); dot.width = dot.height = 8;
+    { const d = dot.getContext('2d'); d.fillStyle = 'rgba(80,0,8,.38)'; d.beginPath(); d.arc(4, 4, 1.7, 0, 7); d.fill() }
+    const HT = ctx.createPattern(dot, 'repeat');
+
+    /* ---------- THE EYE ---------- */
+    const VEINS = []; for (let i = 0; i < 10; i++) { const s = i < 5 ? -1 : 1; VEINS.push([s * 250, (rnd() - .5) * 20, s * (150 + rnd() * 40), (rnd() - .5) * 90, s * (100 + rnd() * 30), (rnd() - .5) * 50]) }
+    function eyePath(c, o) { const w = 250, t = -175 * o, b = 125 * o; c.beginPath(); c.moveTo(-w, 0); c.bezierCurveTo(-w * .45, t * 1.25, w * .45, t * 1.25, w, 0); c.bezierCurveTo(w * .45, b * 1.25, -w * .45, b * 1.25, -w, 0); c.closePath() }
+    function eye(c, o, gx, gy, t) {
+      const px = gx * 78, py = gy * 38;
+      c.save(); eyePath(c, o); c.clip();
+      let g = c.createRadialGradient(0, 0, 20, 0, 0, 270); g.addColorStop(0, '#f6ebe6'); g.addColorStop(.7, '#d9b3ac'); g.addColorStop(1, '#7a2a2e');
+      c.fillStyle = g; c.fillRect(-260, -200, 520, 400);
+      c.strokeStyle = 'rgba(190,20,30,.55)'; c.lineWidth = 1.6;
+      for (const v of VEINS) { c.beginPath(); c.moveTo(v[0], v[1]); c.quadraticCurveTo(v[2], v[3], v[4], v[5]); c.stroke() }
+      g = c.createRadialGradient(px, py, 30, px, py, 86); g.addColorStop(0, '#ff3b2f'); g.addColorStop(.55, '#b00f1c'); g.addColorStop(1, '#2a0408');
+      c.fillStyle = g; c.beginPath(); c.arc(px, py, 86, 0, 7); c.fill();
+      c.strokeStyle = 'rgba(40,0,6,.55)'; c.lineWidth = 1.5;
+      for (let i = 0; i < 46; i++) { const a = i / 46 * 6.2832, j = (i % 3) * 4; c.beginPath(); c.moveTo(px + Math.cos(a) * (40 + j), py + Math.sin(a) * (40 + j)); c.lineTo(px + Math.cos(a) * 82, py + Math.sin(a) * 82); c.stroke() }
+      c.strokeStyle = '#14020a'; c.lineWidth = 6; c.beginPath(); c.arc(px, py, 84, 0, 7); c.stroke();
+      c.fillStyle = '#000'; c.beginPath(); c.arc(px, py, 36 + 3 * Math.sin(t * 2), 0, 7); c.fill();
+      c.fillStyle = 'rgba(255,255,255,.9)'; c.beginPath(); c.arc(px - 16, py - 18, 8, 0, 7); c.arc(px + 14, py + 14, 3.5, 0, 7); c.fill();
+      g = c.createLinearGradient(0, -175 * o, 0, -175 * o + 90); g.addColorStop(0, 'rgba(0,0,0,.7)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+      c.fillStyle = g; c.fillRect(-260, -200, 520, 400);
+      c.restore();
+      eyePath(c, o); c.strokeStyle = '#0a0204'; c.lineWidth = 11; c.lineJoin = 'round'; c.stroke();
+      if (o > .15) { c.beginPath(); c.moveTo(-235, -10 * o); c.bezierCurveTo(-120, -300 * o, 120, -300 * o, 235, -10 * o); c.strokeStyle = 'rgba(120,10,20,.85)'; c.lineWidth = 5; c.stroke() }
+      return P(px, py);
+    }
+
+    /* ---------- THOUGHT BUBBLES (five different shapes, all red) ---------- */
+    const BUB = [
+      { txt: 'Crimes?', kind: 'cloud', x: -285, y: -215, rot: -.08, g: [-.9, -.7], drips: [[-.5, 60, .2], [.1, 95, .5], [.6, 45, .8]] },
+      { txt: 'Murderer?', kind: 'burst', x: 260, y: -150, rot: .07, g: [.95, -.4], drips: [[-.3, 80, .3], [.4, 110, .1], [.75, 50, .7]] },
+      { txt: 'Rape?', kind: 'scrib', x: -300, y: 135, rot: .05, g: [-.9, .7], drips: [[-.6, 70, .4], [0, 100, .2], [.55, 55, .6]] },
+      { txt: 'Justice!', kind: 'slab', x: 275, y: 215, rot: -.05, g: [.8, .8], drips: [[-.7, 60, .1], [-.2, 115, .4], [.3, 70, .2], [.75, 95, .6]] },
+      { txt: 'Secrets!!', kind: 'whisper', x: -30, y: 268, rot: .04, g: [-.2, 1], drips: [[-.55, 50, .5], [.2, 75, .2], [.65, 40, .8]] }
+    ];
+    /* bubble screen positions + the eye gaze that looks at each one */
+    [[.19, .23, -.095, .042], [.81, .25, .095, .038], [.18, .77, -.09, -.042], [.82, .76, .09, -.038], [.5, .17, 0, .052]].forEach((a, i) => Object.assign(BUB[i], { fx: a[0], fy: a[1], gx: a[2], gy: a[3] }));
+    function outline(kind, n, hw, hh, ph) {
+      const pts = [];
+      for (let i = 0; i < n; i++) {
+        const a = i / n * 6.2832, co = Math.cos(a), si = Math.sin(a); let r = 1;
+        if (kind === 'cloud') r = .9 + .15 * Math.abs(Math.sin(a * 3.5));
+        else if (kind === 'burst') r = i % 2 ? .7 : 1.08;
+        else if (kind === 'scrib') r = 1 + .05 * Math.sin(a * 5 + ph) + .035 * Math.sin(a * 9 + ph * 2);
+        else if (kind === 'slab') r = 1 / Math.pow(Math.pow(Math.abs(co), 4) + Math.pow(Math.abs(si), 4), .25) * (1 + .02 * Math.sin(a * 7));
+        else r = 1 + .03 * Math.sin(a * 6 + ph);
+        pts.push([co * r * hw, si * r * hh]);
+      }
+      return pts;
+    }
+    function trace(c, pts, smooth) {
+      c.beginPath();
+      if (!smooth) { pts.forEach((p, i) => i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1])); c.closePath(); return }
+      const n = pts.length, m = i => [(pts[i % n][0] + pts[(i + 1) % n][0]) / 2, (pts[i % n][1] + pts[(i + 1) % n][1]) / 2];
+      let s = m(n - 1); c.moveTo(s[0], s[1]);
+      for (let i = 0; i < n; i++) { const e = m(i); c.quadraticCurveTo(pts[i][0], pts[i][1], e[0], e[1]) }
+      c.closePath();
+    }
+    function bubble(c, b, age, out) {
+      const k = out > 0 ? 1 - ease(cl(out / .22)) : back(age / .55); if (k <= .01) return;
+      c.font = '58px "Permanent Marker",Impact,sans-serif';
+      const tw = c.measureText(b.txt).width, hw = Math.max(130, tw / 2 + 66), hh = b.kind === 'burst' ? 104 : 88, sm_ = b.kind !== 'burst';
+      const ph = b.x * .01;
+      c.save(); c.translate(b.x, b.y + Math.sin(age * 2.1 + b.x) * 4);
+      /* trail of small thought circles toward the eye */
+      const d = Math.hypot(b.x, b.y), dx = -b.x / d, dy = -b.y / d;
+      [[hh + 26, 15], [hh + 56, 10], [hh + 80, 6]].forEach(([r, rad], i) => {
+        if (age < .25 + i * .12) return; c.fillStyle = BUBRED; c.strokeStyle = DARK; c.lineWidth = 3;
+        c.beginPath(); c.arc(dx * r * k, dy * r * k, rad * k, 0, 7); c.fill(); c.stroke()
+      });
+      c.rotate(b.rot); c.scale(k, k);
+      /* drips run down from the bottom edge */
+      for (const [fx, len, dl] of b.drips) {
+        const L = len * ease(cl((age - dl) / 1.4)); if (L < 2) continue;
+        const w = 11, y0 = hh * .9 * Math.sqrt(Math.max(0, 1 - fx * fx)), x = fx * hw;
+        for (const [col, ww] of [[DARK, w + 7], [BUBRED, w]]) {
+          c.strokeStyle = c.fillStyle = col; c.lineCap = 'round'; c.lineWidth = ww;
+          c.beginPath(); c.moveTo(x, y0 - 6); c.lineTo(x, y0 + L); c.stroke();
+          c.beginPath(); c.arc(x, y0 + L, ww * .62, 0, 7); c.fill();
+        }
+      }
+      const pts = outline(b.kind, b.kind === 'burst' ? 26 : 60, hw, hh, ph);
+      trace(c, pts, sm_); c.fillStyle = BUBRED; c.fill(); c.fillStyle = HT; c.fill();
+      c.lineJoin = 'round'; c.strokeStyle = DARK; c.lineWidth = 7;
+      if (b.kind === 'whisper') c.setLineDash([16, 10]);
+      c.stroke(); c.setLineDash([]);
+      if (b.kind === 'scrib') { c.save(); c.rotate(.06); trace(c, outline('scrib', 60, hw * 1.04, hh * 1.06, ph + 2), true); c.lineWidth = 2.5; c.stroke(); c.restore() }
+      c.font = '58px "Permanent Marker",Impact,sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
+      const m = c.getTransform(); LABELS.push({ t: b.txt, x: (m.c * 4 + m.e) / SX, y: (m.d * 4 + m.f) / SY, s: Math.hypot(m.a / SX, m.b / SY), a: Math.atan2(m.b / SY, m.a / SX) });
+      c.restore();
+    }
+
+    /* ---------- SHADED HUMAN FIGURES (2-bone IK) ---------- */
+    function ik(a, b, l1, l2, s) {
+      const dx = b.x - a.x, dy = b.y - a.y, d = Math.min(Math.hypot(dx, dy), l1 + l2 - .01) || .01, an = Math.atan2(dy, dx);
+      const A = Math.acos(cl((l1 * l1 + d * d - l2 * l2) / (2 * l1 * d), -1, 1)) * s;
+      return P(a.x + Math.cos(an + A) * l1, a.y + Math.sin(an + A) * l1);
+    }
+    /* wardrobe: top = [highlight, mid, shadow] so the ASCII ramp picks up folds and form */
+    const LOOK = {
+      noir: { top: ['#ff6a6a', '#e81c2c', '#7c0a14'], coat: 1, pants: '#a0121f', skin: '#c08468', glove: '#3c0509', shoe: '#2c0307', hat: 'fedora' },
+      thug: { top: ['#ff5050', '#d01626', '#700810'], pants: '#8c101c', skin: '#b97a60', glove: '#3c0509', shoe: '#2c0307', hat: 'hood' },
+      man: { top: ['#fbf1ec', '#c2b2ad', '#6a5b5c'], pants: '#5a5068', skin: '#e2ab8c', hair: '#4c2418', shoe: '#3c2c2c' },
+      woman: { top: ['#fbe9e4', '#cfaab0', '#70545c'], pants: '#7c2a3c', skin: '#e8b498', hair: '#5c2a16', long: 1, shoe: '#3c2c2c' }
+    };
+    const dk = (h, k = .6) => '#' + [1, 3, 5].map(i => Math.round(parseInt(h.substr(i, 2), 16) * k).toString(16).padStart(2, '0')).join('');
+    function person(c, p) {
+      const lk = LOOK[p.look || 'man'], f = p.face, top = lk.top;
+      const dx = p.neck.x - p.hip.x, dy = p.neck.y - p.hip.y, m = Math.hypot(dx, dy) || 1, ux = dx / m, uy = dy / m, nx = -uy, ny = ux, rot = Math.atan2(dy, dx) + 1.5708;
+      const sh = P(p.neck.x - ux * 8, p.neck.y - uy * 8);
+      const knees = p.feet.map(ft => ik(p.hip, ft, 62, 60, -f)), elbows = p.hands.map(h => ik(sh, h, 46, 44, f));
+      c.lineCap = c.lineJoin = 'round';
+      /* tapered limb */
+      const seg = (a, b, w1, w2) => {
+        const an = Math.atan2(b.y - a.y, b.x - a.x) + 1.5708, c1 = Math.cos(an), s1 = Math.sin(an);
+        c.beginPath(); c.moveTo(a.x + c1 * w1, a.y + s1 * w1); c.lineTo(b.x + c1 * w2, b.y + s1 * w2); c.lineTo(b.x - c1 * w2, b.y - s1 * w2); c.lineTo(a.x - c1 * w1, a.y - s1 * w1); c.closePath(); c.fill();
+        c.beginPath(); c.arc(b.x, b.y, w2, 0, 7); c.fill()
+      };
+      /* local frame: origin o, -y runs up the spine, +x is the way the figure faces */
+      const local = (o, fn) => { c.save(); c.translate(o.x, o.y); c.rotate(rot); c.scale(f, 1); fn(); c.restore() };
+      const body = flat => {
+        const F = col => { c.fillStyle = flat || col };
+        const leg = (i, far) => {
+          const k = knees[i], ft = p.feet[i]; F(far ? dk(lk.pants) : lk.pants); seg(p.hip, k, 16, 12); seg(k, ft, 12, 8);
+          F(far ? dk(lk.shoe) : lk.shoe); c.beginPath(); c.ellipse(ft.x + f * 8, ft.y + 3, 16, 7, 0, 0, 7); c.fill()
+        };
+        const arm = (i, far) => {
+          const e = elbows[i], h = p.hands[i]; F(far ? top[2] : top[1]); seg(sh, e, 11, 8.5); seg(e, h, 8.5, 6.5);
+          const hand = lk.glove || lk.skin; F(far ? dk(hand) : hand); c.beginPath(); c.arc(h.x, h.y, 7.5, 0, 7); c.fill()
+        };
+        leg(1, 1); arm(1, 1); leg(0, 0);
+        /* trench coat skirt follows the knees */
+        if (lk.coat) {
+          const pr = k => (k.x - p.hip.x) * nx + (k.y - p.hip.y) * ny, ks = [...knees].sort((a, b) => pr(a) - pr(b)), fl = Math.sin(performance.now() / 180) * 3;
+          F(top[2]); c.beginPath(); c.moveTo(p.hip.x + ux * 14 - nx * 18, p.hip.y + uy * 14 - ny * 18);
+          c.lineTo(ks[0].x - nx * 14 + fl, ks[0].y - ny * 14 + 8); c.lineTo(ks[1].x + nx * 14 + fl, ks[1].y + ny * 14 + 8);
+          c.lineTo(p.hip.x + ux * 14 + nx * 18, p.hip.y + uy * 14 + ny * 18); c.closePath(); c.fill();
+        }
+        local(p.neck, () => { F(lk.skin); c.fillRect(-6, -16, 12, 20) });
+        local(p.hip, () => {
+          let g = flat; if (!flat) { g = c.createLinearGradient(14, -m - 6, -10, 8); g.addColorStop(0, top[0]); g.addColorStop(.5, top[1]); g.addColorStop(1, top[2]) }
+          c.fillStyle = g; trace(c, [[-18, -m + 5], [-4, -m - 2], [13, -m + 3], [19, -m * .62], [15, -m * .28], [15, 5], [0, 9], [-16, 5], [-13, -m * .32], [-20, -m * .72]], true); c.fill();
+          if (!flat) {
+            c.lineWidth = 3.5;
+            if (lk.coat) {
+              c.strokeStyle = top[0]; c.beginPath(); c.moveTo(-2, -m + 2); c.lineTo(9, -m * .5); c.lineTo(14, -m + 6); c.stroke();
+              c.strokeStyle = '#1c0204'; c.lineWidth = 5; c.beginPath(); c.moveTo(-16, -13); c.lineTo(16, -13); c.stroke()
+            }
+            else { c.strokeStyle = top[2]; c.beginPath(); c.moveTo(4, -m + 2); c.lineTo(8, -m * .3); c.stroke() }
+          }
+        });
+        /* head in profile: skull, brow, nose, lips, chin */
+        local(P(p.neck.x + ux * 30, p.neck.y + uy * 30), () => {
+          if (lk.hat === 'hood') { F(top[1]); c.beginPath(); c.ellipse(-5, -1, 21, 25, 0, 0, 7); c.fill() }
+          if (lk.long) { F(lk.hair); c.beginPath(); c.moveTo(-6, -22); c.bezierCurveTo(-30, -14, -30, 14, -20, 34); c.quadraticCurveTo(-10, 30, -4, 14); c.closePath(); c.fill() }
+          F(lk.skin); c.beginPath(); c.moveTo(-14, 0); c.bezierCurveTo(-15, -23, 8, -27, 13, -11); c.lineTo(14, -6); c.lineTo(20, 1); c.lineTo(14, 4); c.lineTo(15, 8);
+          c.quadraticCurveTo(14, 15, 5, 16); c.lineTo(-4, 15); c.quadraticCurveTo(-14, 12, -14, 0); c.fill();
+          if (!flat) {
+            c.fillStyle = dk(lk.skin, .55); c.beginPath(); c.ellipse(-3, 0, 3.5, 5, 0, 0, 7); c.fill();
+            c.fillStyle = 'rgba(20,0,4,.75)'; c.beginPath(); c.ellipse(8, -5, 3.5, 2.2, 0, 0, 7); c.fill()
+          }
+          if (lk.hair) { F(lk.hair); c.beginPath(); c.moveTo(-15, 3); c.bezierCurveTo(-18, -25, 8, -29, 13, -13); c.quadraticCurveTo(0, -18, -6, -10); c.quadraticCurveTo(-9, -3, -15, 3); c.fill() }
+          if (lk.hat === 'fedora') {
+            F(dk(top[1], .55)); c.beginPath(); c.moveTo(-13, -13); c.lineTo(-11, -33); c.quadraticCurveTo(1, -27, 13, -33); c.lineTo(14, -13); c.fill();
+            F(top[0]); c.fillRect(-13, -19, 27, 4); F(dk(top[1], .55)); c.beginPath(); c.ellipse(2, -13, 27, 4.5, 0, 0, 7); c.fill()
+          }
+          if (lk.hat === 'hood') {
+            F(top[1]); c.beginPath(); c.moveTo(-19, 12); c.bezierCurveTo(-26, -32, 14, -36, 18, -8); c.quadraticCurveTo(5, -19, -6, -11); c.quadraticCurveTo(-10, 0, -19, 12); c.fill();
+            if (!flat) { c.fillStyle = 'rgba(10,0,2,.55)'; c.beginPath(); c.ellipse(9, 0, 9, 14, 0, 0, 7); c.fill() }
+          }
+        });
+        arm(0, 0);
+      };
+      c.save(); c.translate(24, 8); body('rgba(70,0,10,.8)'); c.restore();
+      body();
+    }
+    function burst(c, x, y, r) {
+      if (r <= 1) return; const nw = performance.now(); if (nw - lastBurst > 350) { lastBurst = nw; const m = c.getTransform(); spawn((m.a * x + m.e) / SX, (m.d * y + m.f) / SY) } c.strokeStyle = '#ffd8d2'; c.lineWidth = 5; c.lineCap = 'round';
+      for (let k = 0; k < 9; k++) { const a = k * .698; c.beginPath(); c.moveTo(x + Math.cos(a) * r * .4, y + Math.sin(a) * r * .4); c.lineTo(x + Math.cos(a) * r, y + Math.sin(a) * r); c.stroke() }
+    }
+    function knife(c, h, ang) {
+      c.save(); c.translate(h.x, h.y); c.rotate(ang);
+      c.fillStyle = '#3a0a0a'; c.fillRect(-12, -4, 16, 8); c.fillStyle = '#9a8a88'; c.fillRect(3, -7, 4, 14);
+      c.fillStyle = '#f6ebe8'; c.beginPath(); c.moveTo(7, -4); c.lineTo(42, -2); c.lineTo(50, 3); c.lineTo(7, 4); c.closePath(); c.fill(); c.restore()
+    }
+    function gun(c, h, dir) {
+      c.save(); c.translate(h.x, h.y); c.scale(dir, 1);
+      c.fillStyle = '#d8d0ce'; c.fillRect(-6, -10, 38, 9); c.fillStyle = '#8e8684'; c.save(); c.rotate(.25); c.fillRect(-5, -3, 11, 17); c.restore();
+      c.strokeStyle = '#8e8684'; c.lineWidth = 2.5; c.beginPath(); c.arc(11, 1, 5, 0, 3.1416); c.stroke(); c.restore()
+    }
+
+    /* four scenes: left, right, left, right */
+    function scene(i, st, c) {
+      if (i === 0) { /* beating (left) */
+        const p = (st * .95) % 1, up = p < .5 ? sm(p * 2) : p < .6 ? 1 - (p - .5) / .1 : 0, sh = p > .58 && p < .9 ? Math.sin(p * 90) * (1 - (p - .58) / .32) * 9 : 0;
+        person(c, { look: 'man', face: 1, hip: P(-62 + sh, 66), neck: P(-70 + sh, 6), hands: [P(-52 + sh, -22), P(-84 + sh, -24)], feet: [P(-100, 124), P(-30, 124)] });
+        person(c, { look: 'thug', face: -1, hip: P(62, 0), neck: P(R(34, 54, up), -66), hands: [P(R(-25, 75, up), R(-10, -150, up)), P(98, -20)], feet: [P(40, 124), P(100, 124)] });
+        if (p > .58 && p < .72) burst(c, -38, -12, 42 * (1 - (p - .58) / .14));
+      } else if (i === 1) { /* stabbing (right) */
+        const k = ss(.55, .8, st), f = ss(.85, 1.9, st), h = P(R(-25, 45, k), R(-140, -30, k));
+        c.fillStyle = '#6e0510'; c.beginPath(); c.ellipse(100, 128, 110 * ss(1.3, 2.8, st) + 1, 10, 0, 0, 7); c.fill();
+        person(c, { look: 'man', face: -1, hip: P(R(68, 112, f), R(0, 112, f)), neck: P(R(66, 32, f), R(-68, 114, f)), hands: [P(R(35, 5, f), R(-30, 108, f)), P(R(90, 60, f), R(-20, 118, f))], feet: [P(R(50, 205, f), R(124, 118, f)), P(R(96, 212, f), R(124, 124, f))] });
+        person(c, { look: 'noir', face: 1, hip: P(-75, 0), neck: P(R(-92, -60, k), -66), hands: [h, P(-120, -30)], feet: [P(-95, 124), P(-45, 124)] });
+        knife(c, h, R(-1.3, .5, k));
+        if (st > .78 && st < .95) burst(c, 50, -35, 34 * (1 - (st - .78) / .17));
+      } else if (i === 2) { /* gunpoint (left) */
+        const f = ss(1.5, 2.5, st), fl = st > 1.5 && st < 1.66 ? 1 - (st - 1.5) / .16 : 0;
+        person(c, { look: 'woman', face: 1, hip: P(-70, R(64, 100, f)), neck: P(R(-70, -30, f), R(-6, 50, f)), hands: [P(R(-84, -50, f), R(-84, 70, f)), P(R(-52, -30, f), R(-84, 76, f))], feet: [P(-122, 122), P(-108, 124)] });
+        person(c, { look: 'noir', face: -1, hip: P(78, 0), neck: P(64, -68), hands: [P(2, -62), P(14, -56)], feet: [P(56, 124), P(112, 124)] });
+        gun(c, P(2, -62), -1);
+        burst(c, -40, -64, 52 * fl);
+      } else { /* chase (right) */
+        const ph = st * 9, gap = R(-125, -60, ss(0, 3, st));
+        const run = (x, face, hy, look) => ({
+          look, face, hip: P(x, hy - Math.abs(Math.sin(ph)) * 6), neck: P(x + 22 * face, hy - 66),
+          feet: [0, 1].map(i => P(x + Math.sin(ph + 3.14 * i) * 38, 124 - Math.max(0, Math.cos(ph + 3.14 * i)) * 34))
+        });
+        const v = run(70, 1, 0, 'woman'); v.hands = [P(v.neck.x + Math.sin(ph) * 38, v.neck.y + 58), P(v.neck.x - Math.sin(ph) * 38, v.neck.y + 58)]; person(c, v);
+        const k = run(gap, 1, 0, 'thug'), kh = P(gap + 54, -120); k.hands = [kh, P(k.neck.x + Math.sin(ph) * 38, k.neck.y + 58)]; person(c, k); knife(c, kh, -.5);
+        c.strokeStyle = 'rgba(212,16,31,.5)'; c.lineWidth = 4; c.lineCap = 'round';
+        for (let q = -6; q < 8; q++) { const x = ((q * 70 - st * 420) % 560 + 560) % 560 - 280; c.beginPath(); c.moveTo(x, 142); c.lineTo(x + 30, 142); c.stroke() }
+      }
+    }
+
+    size(); addEventListener('resize', size);
+    /* diary page flips: the rapid flip-through technique, built from original diary pages */
+    function ink(c, x0, x1, s) {
+      c.lineCap = 'round'; const wd = x1 - x0;
+      for (let r = 0; r < 15; r++) {
+        const y = H * (.1 + r * .056), w = wd * (.35 + .6 * hs(s, r));
+        c.strokeStyle = 'rgba(40,25,20,.85)'; c.lineWidth = H * .012; c.beginPath(); c.moveTo(x0 + wd * .1, y);
+        for (let x = 0; x < w; x += H * .03)c.lineTo(x0 + wd * .1 + x, y + Math.sin(x * .05 + r + s) * H * .01); c.stroke()
+      }
+      c.fillStyle = 'rgba(180,10,20,.9)'; c.beginPath(); c.ellipse(x0 + wd * (.3 + .4 * hs(s, 99)), H * (.3 + .4 * hs(s, 98)), H * .09, H * .07, hs(s, 97) * 3, 0, 7); c.fill();
+    }
+    function flip(c, p, k) {
+      const W2 = W / 2, n = 9, d = 1 / n;
+      c.fillStyle = '#d9c7a3'; c.fillRect(0, 0, W, H); ink(c, 0, W2, k * 13 + 1);
+      for (let i = 0; i < n; i++) {
+        const f = (p - i * d * .8) / (d * 1.7); if (f <= 0 || f >= 1) continue;
+        const cs = Math.cos(Math.PI * f);
+        c.save(); c.translate(W2, 0); c.scale(cs, 1);
+        c.fillStyle = cs > 0 ? '#f0e2c4' : '#b9a47c'; c.fillRect(0, -4, W2, H + 8); ink(c, 0, W2, k * 13 + i + 2); c.restore()
+      }
+      c.fillStyle = 'rgba(0,0,0,.55)'; c.fillRect(W2 - 3, 0, 6, H);
+    }
+    /* ---------- TIMELINE ---------- */
+    const TG = [2.2, 4, 5.8, 7.6, 9.4, 11.2];
+    const T_BLINK = 11.8, T_ZOOM = 12.4, T_SCENE = 14, SC_DUR = 3.4, T_TITLE = 27.6, T_PAN = 31, TR = .75;
+    let T0 = performance.now();
+    document.getElementById('rp').onclick = () => replay();
+
+    function draw(t) {
+      const c = ctx; c.setTransform(SX, 0, 0, SY, 0, 0); c.fillStyle = '#060405'; c.fillRect(0, 0, W, H);
+      if (t < T_ZOOM + .2) {
+        c.save(); c.translate(W / 2, H / 2); c.scale(u, u);
+        BUB.forEach((bb, n) => { const s = TG[n] + .35, e2 = TG[n + 1] + .05; if (t >= s && t < e2 + .25) bubble(c, { ...bb, x: (bb.fx - .5) * W / u, y: (bb.fy - .5) * H / u }, t - s, t > e2 ? t - e2 : 0) });
+        c.restore();
+      }
+      if (t > T_SCENE && t < T_TITLE + .4) {
+        const raw = t - T_SCENE, idx = Math.min(3, Math.floor(raw / SC_DUR)), st = raw - idx * SC_DUR;
+        const al = ease(cl(raw / .5)), cx = W * (idx % 2 ? .72 : .28), cy = H * .5;
+        c.save(); c.globalAlpha = al; c.fillStyle = '#060405'; c.fillRect(0, 0, W, H);
+        const g = c.createRadialGradient(cx, cy, 10, cx, cy, Math.min(W, H) * .6); g.addColorStop(0, 'rgba(120,6,16,.16)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+        c.fillStyle = g; c.fillRect(0, 0, W, H);
+        /* we are inside the eye: iris fibers around the edges */
+        c.save(); c.translate(W / 2, H / 2); {
+          const r1 = Math.min(W, H) * .6, r2 = Math.hypot(W, H) * .55;
+          for (let k = 0; k < 110; k++) {
+            const a = k / 110 * 6.2832 + Math.sin(k) * .02, ra = r1 * (1 + .12 * Math.sin(k * 1.7)), rb = ra + (r2 - ra) * (.5 + .5 * Math.sin(k * 2.9 + t * .7));
+            c.strokeStyle = `rgba(${170 + (k * 37) % 80},${12 + (k % 5) * 9},16,${.5 + .3 * Math.sin(k * 1.3)})`; c.lineWidth = 3; c.beginPath(); c.moveTo(Math.cos(a) * ra, Math.sin(a) * ra); c.lineTo(Math.cos(a) * rb, Math.sin(a) * rb); c.stroke()
+          }
+          c.strokeStyle = 'rgba(40,0,6,.9)'; c.lineWidth = 14; c.beginPath(); c.arc(0, 0, r1 * .97, 0, 7); c.stroke()
+        } c.restore();
+        const sh = st < .25 ? (1 - st / .25) * 7 * u : 0;
+        c.translate(cx + Math.sin(t * 90) * sh, cy + Math.cos(t * 70) * sh); c.scale(u * 1.3, u * 1.3);
+        /* venetian-blind light slats on the wall behind the figures */
+        c.save(); c.rotate(-.35); for (let k = -14; k < 14; k++) { c.fillStyle = 'rgba(150,10,22,.12)'; c.fillRect(-560, k * 46 + ((t * 14) % 46), 1120, 18) } c.restore();
+        c.strokeStyle = 'rgba(212,16,31,.35)'; c.lineWidth = 3; c.beginPath(); c.moveTo(-260, 142); c.lineTo(260, 142); c.stroke();
+        if (st >= TR) scene(idx, st - TR, c);
+        c.restore();
+        if (st < TR) flip(c, st / TR, idx); else if (raw > 4 * SC_DUR - .7) flip(c, (raw - 4 * SC_DUR + .7) / .7, idx + 1);
+        c.save(); c.globalAlpha = al;
+        const v = c.createRadialGradient(W / 2, H / 2, Math.min(W, H) * .3, W / 2, H / 2, Math.hypot(W, H) * .55); v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,.92)');
+        c.fillStyle = v; c.fillRect(0, 0, W, H);
+        if (st >= TR && st < TR + .14) { c.globalAlpha = .55 * (1 - (st - TR) / .14); c.fillStyle = '#ff2a2a'; c.fillRect(0, 0, W, H) }
+        c.restore();
+      }
+    }
+    const RAMP = ` .'^",:;Il!i><~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$`, N = RAMP.length;
+    var rain, Vb, Cr, Cg, Cb, parts = [], LABELS = [], shk = 0, lastBurst = 0, glitch = 0, last = 0;
+    const STREAM = 'MURDER ROBBERY ARSON FRAUD KIDNAP ASSAULT HOMICIDE VERDICT JUSTICE SECRETS EVIDENCE 0417 CASE FILE ';
+    const F5 = { C: [' ####', '#    ', '#    ', '#    ', ' ####'], R: ['#### ', '#   #', '#### ', '#  # ', '#   #'], I: ['#####', '  #  ', '  #  ', '  #  ', '#####'], M: ['#   #', '## ##', '# # #', '#   #', '#   #'], E: ['#####', '#    ', '#### ', '#    ', '#####'], F: ['#####', '#    ', '#### ', '#    ', '#    '], L: ['#    ', '#    ', '#    ', '#    ', '#####'], S: [' ####', '#    ', ' ### ', '    #', '#### '], D: ['#### ', '#   #', '#   #', '#   #', '#### '], A: [' ### ', '#   #', '#####', '#   #', '#   #'] };
+    const WORD = 'CRIME DIARIES', TW = 75, TITLE = [0, 1, 2, 3, 4].map(y => [...WORD].map(ch => ch === ' ' ? '   ' : F5[ch][y] + ' ').join(''));
+    const hs = (a, b) => { const n = Math.sin(a * 12.9898 + b * 78.233) * 43758.5453; return n - Math.floor(n) };
+
+    function initGrid() {
+      const n = COLS * ROWS; Vb = new Float32Array(n); Cr = new Uint8Array(n); Cg = new Uint8Array(n); Cb = new Uint8Array(n); rain = [];
+      for (let c = 0; c < COLS; c++)rain.push({ y: Math.random() * ROWS * 1.5 - ROWS, v: Math.random(), o: (Math.random() * STREAM.length) | 0, l: 6 + ((Math.random() * 16) | 0) })
+    }
+    function spawn(x, y) { for (let i = 0; i < 30; i++) { const a = Math.random() * 6.283, s = 70 + Math.random() * 300; parts.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 140, l: .6 + Math.random() * .9, ch: '*:.,;'[(Math.random() * 5) | 0] }) } shk = 1 }
+    function put(s, col, row, color) { out.fillStyle = color; out.fillText(s, col * CW, row * CH + CH * .82) }
+    function tape(x, y, ang, len, off, a) {
+      if (a <= .01) return; const h = CH * 1.6, s = 'CRIME SCENE — DO NOT CROSS — ', sw = out.measureText(s).width;
+      out.save(); out.globalAlpha = a; out.translate(x, y); out.rotate(ang);
+      out.beginPath(); out.rect(-len / 2, -h / 2, len, h); out.clip();
+      out.fillStyle = '#f2c400'; out.fillRect(-len / 2, -h / 2, len, h); out.fillStyle = '#120a00'; out.textBaseline = 'middle';
+      for (let X = -len / 2 - ((off % sw) + sw) % sw; X < len / 2; X += sw)out.fillText(s, X, 1);
+      out.restore()
+    }
+
+    /* ===== THE EYE (your shader, ported): skin, lids, crease, sclera, fibrous iris, pupil, 30 deg tilt ===== */
+    var ES = { ou: .02, gx: 0, gy: 0, z: 1, dp: 0 }, eo = { r: 0, g: 0, b: 0 }, mix = R, portal = false;
+    const $ = id => document.getElementById(id);
+    const vn = (x, y) => { const i = Math.floor(x), j = Math.floor(y), fx = sm(x - i), fy = sm(y - j), a = hs(i, j), b = hs(i + 1, j), c = hs(i, j + 1), d = hs(i + 1, j + 1); return a + (b - a) * fx + (c - a) * fy + (a - b - c + d) * fx * fy };
+    function eyeState(t, dt) {
+      let ou = 1, tx = 0, ty = 0;
+      if (t < 2.2) { ou = ss(.05, .92, t / 2.2); tx = .02 * Math.sin(t / 2.2 * Math.PI) }
+      else for (let i = 0; i < 5; i++)if (t >= TG[i] && t < TG[i + 1]) { tx = BUB[i].gx; ty = BUB[i].gy }
+      const bd = t - T_BLINK; if (bd >= 0 && bd <= .36) ou = Math.min(ou, Math.max(.02, 1 - .98 * Math.sin(bd / .36 * Math.PI)));
+      ES.dp = ss(0, 1, cl((t - T_ZOOM) / 1.5)); ES.z = Math.pow(.06, ES.dp);
+      const k = Math.min(1, dt * 11); ES.gx += (tx - ES.gx) * k; ES.gy += (ty - ES.gy) * k; ES.ou = ou;
+    }
+    function eyeShade(uS, vS, o) {
+      const wo = .36, Ri = .148, Rp = .052, cT = Math.cos(TILT), sT = Math.sin(TILT), ou = ES.ou, gx = ES.gx, gy = ES.gy, z = ES.z, dp = ES.dp;
+      const u0 = uS * cT - vS * sT, v0 = uS * sT + vS * cT, u = u0 * z + gx * (1 - z), v = v0 * z + gy * (1 - z);
+      const vt = v - .015 * (u / wo), s = u / wo, aX = cl(1 - s * s);
+      const vUp = (.145 * ou - .015 * (1 - ou)) * Math.pow(aX, .78) + .012 * Math.sin(u * 6), vLo = -(.075 * (.35 + .65 * ou) + .015 * (1 - ou)) * Math.pow(aX, .85);
+      const du = Math.abs(vt - vUp), dl = Math.abs(vt - vLo), upper = vt >= .5 * (vUp + vLo), dd = upper ? du : dl;
+      const mIn = ss(-.004, .008, Math.min(vUp - vt, vt - vLo)) * ss(wo, wo * .92, Math.abs(u));
+      const sk = .9 + .2 * vn(u * 40 + 7, v * 40 + 7);
+      let sR = .62 * sk, sG = .4 * sk, sB = .29 * sk;
+      let sh = .5 + .5 * ss(0, .3, dd) + .1 * Math.exp(-Math.pow((v + .2) / .09, 2));
+      if (upper) sh -= .42 * Math.exp(-Math.pow((du - (.075 + .03 * (1 - ou))) / .02, 2));
+      sh = cl(sh, .08, 1.35); sR *= sh; sG *= sh; sB *= sh;
+      let Rr = sR, Gg = sG, Bb = sB;
+      if (mIn > .001) {
+        const eu = u - gx, ev = vt - gy, rE = Math.sqrt(eu * eu + ev * ev + 1e-10), an = Math.atan2(ev, eu);
+        const sc = cl(1 - .85 * ((u * u) / (wo * wo * 1.2) + (vt * vt) / .05), .35, 1);
+        let iR = .9 * sc, iG = .87 * sc, iB = .84 * sc;
+        const im = ss(Ri + .008, Ri - .008, rE);
+        if (im > .001) {
+          const fb = .5 + .5 * Math.sin(an * 28 + 1.8 * vn(Math.cos(an) * 3 + 9, Math.sin(an) * 3 + 9));
+          iR = mix(iR, mix(.52, .82, fb), im); iG = mix(iG, mix(.24, .42, fb) * (1 - .4 * dp), im); iB = mix(iB, mix(.14, .22, fb) * (1 - .5 * dp), im)
+        }
+        const pm = ss(Rp + .005, Rp - .005, rE);
+        if (pm > .001) { iR = mix(iR, .01 + .16 * dp * dp, pm); iG = mix(iG, .01, pm); iB = mix(iB, .015, pm) }
+        Rr = mix(sR, iR, mIn); Gg = mix(sG, iG, mIn); Bb = mix(sB, iB, mIn);
+      }
+      o.r = Rr * 1.18; o.g = Gg * 1.18; o.b = Bb * 1.18;
+    }
+
+    /* ===== THE ENDING (your look): sliding case panels, then the metallic plate ===== */
+    function panels(c, W, H, prog) {
+      c.save(); c.fillStyle = '#030305'; c.fillRect(0, 0, W, H);
+      for (let i = 0; i < 5; i++) {
+        const po = i / 5 * 6.2832 + prog * 4.712, px = W * .5 + Math.sin(po) * (W * .45 * (1 - prog * .5)), pw = W * .18;
+        c.save(); c.globalAlpha = cl(Math.cos(po) * .5 + .5, .2, 1) * (1 - ss(.7, 1, prog));
+        c.fillStyle = i % 2 ? '#14051a' : '#1a0514'; c.strokeStyle = '#dc2626'; c.lineWidth = 2;
+        c.beginPath(); c.roundRect(px - pw / 2, H * .15, pw, H * .7, 12); c.fill(); c.stroke();
+        c.fillStyle = '#fca5a5'; c.font = '700 12px Cinzel,serif'; c.textAlign = 'center'; c.fillText('CASE 0' + (i + 1), px, H * .5); c.restore()
+      }
+      const lr = ss(.55, .95, prog);
+      if (lr > .01) {
+        c.save(); c.globalAlpha = lr; const sc = .8 + .2 * (1 - lr); c.translate(W / 2, H / 2); c.scale(sc, sc);
+        const lw = Math.min(620, W * .85), lh = 110;
+        c.fillStyle = '#140509'; c.strokeStyle = '#ef4444'; c.lineWidth = 4; c.shadowColor = '#dc2626'; c.shadowBlur = 25;
+        c.beginPath(); c.roundRect(-lw / 2, -lh / 2, lw, lh, 12); c.fill(); c.stroke(); c.shadowBlur = 0;
+        c.fillStyle = '#fff'; c.font = '900 36px Cinzel,serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('CRIME DIARIES', 0, -6);
+        c.fillStyle = '#ef4444'; c.font = '700 13px "JetBrains Mono",monospace'; c.fillText('SECURE INVESTIGATION ARCHIVE', 0, 30); c.restore()
+      }
+      c.restore();
+    }
+    function replay() { T0 = performance.now(); portal = false; $('lp').classList.remove('on'); $('db').classList.remove('on') }
+    $('lf').onsubmit = e => { e.preventDefault(); $('cu').textContent = ($('un').value || 'DETECTIVE').toUpperCase(); $('lp').classList.remove('on'); $('db').classList.add('on') };
+    $('lock').onclick = replay; $('rpl').onclick = e => { e.preventDefault(); replay() };
+    function loop(now) {
+      requestAnimationFrame(loop); if (now - last < 33) return;
+      const dt = Math.min(.1, (now - last) / 1000); last = now; const t = (now - T0) / 1000;
+      if (!Vb || Vb.length !== COLS * ROWS) initGrid();
+      LABELS.length = 0; draw(t);
+      /* 1) average each cell of the hidden canvas */
+      const d = ctx.getImageData(0, 0, COLS * S, ROWS * S).data, w4 = COLS * S * 4, tick = (now / 120) | 0, n = S * S;
+      for (let r = 0; r < ROWS; r++)for (let c = 0; c < COLS; c++) {
+        let rr = 0, gg = 0, bb = 0;
+        for (let y = 0; y < S; y++) { let i = (r * S + y) * w4 + c * S * 4; for (let x = 0; x < S; x++, i += 4) { rr += d[i]; gg += d[i + 1]; bb += d[i + 2] } }
+        rr /= n; gg /= n; bb /= n;
+        const mx = Math.max(rr, gg, bb), V = mx / 255, q = r * COLS + c;
+        if (V < .07) { Vb[q] = 0; continue }
+        const m = (.35 + .65 * V) * 255 / mx; Vb[q] = V; Cr[q] = Math.min(255, rr * m); Cg[q] = Math.min(255, gg * m); Cb[q] = Math.min(255, bb * m);
+      }
+      /* 1b) the procedural eye fills every cell the bubbles leave empty */
+      if (t < T_SCENE) {
+        eyeState(t, dt);
+        const hv = .32 * Math.max(1, 1.4375 * H / W), hu = hv * W / H;
+        for (let r = 0; r < ROWS; r++)for (let c = 0; c < COLS; c++) {
+          const q = r * COLS + c; if (Vb[q] > 0) continue;
+          eyeShade(((c + .5) / COLS * 2 - 1) * hu, (1 - (r + .5) / ROWS * 2) * hv, eo);
+          const L = Math.min(1, Math.max(eo.r * .85, .299 * eo.r + .587 * eo.g + .114 * eo.b));
+          if (L < .04) continue;
+          Vb[q] = Math.pow(L, .667); Cr[q] = Math.min(255, eo.r * 255); Cg[q] = Math.min(255, eo.g * 255); Cb[q] = Math.min(255, eo.b * 255);
+        }
+      }
+      /* 2) glitch triggers */
+      const raw = t - T_SCENE, inS = raw > .5 && t < T_TITLE;
+      if (Math.random() < .008) glitch = Math.max(glitch, .18);
+      if (inS && Math.abs(raw % SC_DUR - TR) < .06) glitch = Math.max(glitch, .3);
+      if (Math.abs(t - T_TITLE) < .25 || Math.abs(t - T_ZOOM - 1.3) < .12) glitch = Math.max(glitch, .3);
+      glitch = Math.max(0, glitch - dt);
+      /* 3) draw characters */
+      out.setTransform(dpr, 0, 0, dpr, 0, 0); out.fillStyle = '#000'; out.fillRect(0, 0, innerWidth, innerHeight);
+      out.font = `bold ${(CH * .95).toFixed(1)}px "Courier New",Consolas,monospace`; out.textBaseline = 'alphabetic';
+      shk *= .88; out.translate((Math.random() - .5) * shk * 12, (Math.random() - .5) * shk * 12);
+      const RI = ss(.4, 2.2, t) * (t < T_SCENE ? 1 : .5), fast = t > T_ZOOM && t < T_ZOOM + 1.6 ? 3 : 1;
+      for (const q of rain) { q.y += (8 + q.v * 30) * dt * fast; if (q.y - q.l > ROWS) q.y = -Math.random() * 30 }
+      for (let r = 0; r < ROWS; r++)for (let c = 0; c < COLS; c++) {
+        const i = r * COLS + c, V = Vb[i], y = r * CH + CH * .82,
+          x = c * CW + (glitch > 0 && (r * 7 + tick) % 9 === 0 ? ((Math.sin(r * 91 + tick) * 8) | 0) * CW : 0);
+        if (V > 0) {
+          let ch = null;
+          if (c > 0 && r > 0 && c < COLS - 1 && r < ROWS - 1 && V < .95) {
+            const gx = (Vb[i + 1] - Vb[i - 1]) * .5, gy = (Vb[i + COLS] - Vb[i - COLS]) * .5 * CW / CH;
+            if (Math.hypot(gx, gy) > .14) { const ph = (Math.atan2(gy, gx) + 4.7124) % 3.1416; ch = ph < .39 || ph > 2.75 ? '-' : ph < 1.18 ? '\\' : ph < 1.96 ? '|' : '/' }
+          }
+          if (!ch) { const k = Math.round(Math.pow(V, 1.5) * (N - 1) + (hs(c * 1.1, r + tick * 3.7) - .5) * 1.4); if (k < 1) continue; ch = RAMP[Math.min(k, N - 1)] }
+          if (V > .75) { out.fillStyle = 'rgba(0,210,255,.25)'; out.fillText(ch, x - 1.4, y) }
+          out.fillStyle = `rgb(${Cr[i]},${Cg[i]},${Cb[i]})`; out.fillText(ch, x, y);
+        } else if (RI > .02) {
+          const q = rain[c], dd = q.y - r;
+          if (dd >= 0 && dd < q.l) { const b = (1 - dd / q.l) * RI; out.fillStyle = dd < 1 ? `rgba(255,110,110,${b})` : `rgba(150,8,18,${b * .8})`; out.fillText(STREAM[(r + q.o) % STREAM.length], x, y) }
+        }
+      }
+      /* 4) blood spatter particles */
+      parts = parts.filter(p => (p.l -= dt) > 0);
+      for (const p of parts) { p.vy += 520 * dt; p.x += p.vx * dt; p.y += p.vy * dt; out.fillStyle = `rgba(255,${40 + (p.l * 60 | 0)},40,${Math.min(1, p.l * 2)})`; out.fillText(p.ch, p.x, p.y) }
+      /* bubble words are drawn as real crisp text on top of the ASCII so they stay readable */
+      for (const L of LABELS) {
+        out.save(); out.translate(L.x, L.y); out.rotate(L.a); out.scale(L.s, L.s);
+        out.font = '58px "Permanent Marker",Impact,sans-serif'; out.textAlign = 'center'; out.textBaseline = 'middle'; out.lineJoin = 'round';
+        out.lineWidth = 12; out.strokeStyle = '#14000a'; out.strokeText(L.t, 0, 0);
+        out.shadowColor = 'rgba(255,30,40,.85)'; out.shadowBlur = 16; out.fillStyle = '#fff3ee'; out.fillText(L.t, 0, 0); out.restore()
+      }
+      /* 5) CCTV overlay during the scenes */
+      if (inS) {
+        const idx = Math.min(3, Math.floor(raw / SC_DUR)), st = raw % SC_DUR;
+        put((now % 1000 < 600 ? '● ' : '  ') + 'REC   CAM 0' + (idx + 1), 3, 2, '#ff3b3b');
+        put('2026-10-22  02:14:' + String(7 + (raw | 0)).padStart(2, '0'), COLS - 26, 2, '#e8d8d4');
+        put(('DIARY ENTRY #0417 — EXHIBIT ' + 'ABCD'[idx]).slice(0, (st * 34) | 0), 3, ROWS - 3, '#ff3b3b');
+        /* police tape across two corners */
+        const ta = ss(.5, 1.2, raw) * (1 - ss(T_TITLE - T_SCENE - .4, T_TITLE - T_SCENE, raw));
+        tape(innerWidth * .84, innerHeight * .86, -.3, innerWidth * .75, raw * 60, ta);
+        tape(innerWidth * .12, innerHeight * .2, .24, innerWidth * .55, -raw * 45, ta * .9);
+      }
+      /* 6) title card: decrypts out of noise */
+      const tt = t - T_TITLE - .4;
+      if (tt > 0) {
+        const sx = COLS >= 160 ? 2 : 1, x0 = ((COLS - TW * sx) / 2) | 0, y0 = ((ROWS - 5 * sx) / 2 - 3) | 0;
+        for (let py = 0; py < 5; py++)for (let px = 0; px < TW; px++) {
+          const on = TITLE[py][px] === '#', hv = hs(px, py), rv = px / TW * 1.3 + hv * .4;
+          for (let a = 0; a < sx; a++)for (let b = 0; b < sx; b++) {
+            const X = (x0 + px * sx + a) * CW, Y = (y0 + py * sx + b) * CH + CH * .82;
+            if (tt < rv) { if (on || hv > .8) { out.fillStyle = 'rgba(180,10,20,.7)'; out.fillText('01#@%&$'[(Math.random() * 7) | 0], X, Y) } }
+            else if (on) { const sw = Math.abs(px - ((tt * 30) % (TW + 40) - 10)) < 2; out.fillStyle = sw ? '#fff' : '#ff2a3a'; out.fillText('@#8&%$'[(px * 3 + py * 5 + ((tt * 4) | 0)) % 6], X, Y) }
+          }
+        }
+        const sub = 'EVERY CRIME. EVERY CASE. EVERY SECRET.';
+        put(sub.slice(0, Math.max(0, ((tt - 1.8) * 26) | 0)), ((COLS - sub.length) / 2) | 0, y0 + 5 * sx + 3, '#e8d8d4');
+      }
+      if (t > T_PAN) panels(out, innerWidth, innerHeight, ss(T_PAN, T_PAN + 5.5, t));
+      if (t > T_PAN + 5.5 && !portal) { portal = true; $('lp').classList.add('on') }
+    }
+    Promise.race([Promise.all([document.fonts.load('46px "Permanent Marker"'), document.fonts.load('900 36px Cinzel'), document.fonts.load('700 13px "JetBrains Mono"')]), new Promise(r => setTimeout(r, 1800))]).then(() => { T0 = performance.now(); requestAnimationFrame(loop) });
+  </script>
+</body>
+
+</html>
