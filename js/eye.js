@@ -42,33 +42,38 @@ function shade(S,uS,vS,o,tilt){
 function createEye(cv,opt={}){
   const ctx=cv.getContext('2d'),S={ou:0,gx:0,gy:0,pd:0},o={r:0,g:0,b:0};
   const pixel=opt.mode==='pixel',fill=opt.fill||.75,cy=opt.cy??.5,tilt=opt.tilt||0,t0=performance.now();
-  let W,H,dpr,COLS,ROWS,CW,CH,hu,hv,vy,visible=true,last=0,blinkAt=-1e9,nextBlink=t0+3000,interest=0,squint=0,look=null,wander={x:0,y:0,next:0};
+  let W,H,dpr,COLS,ROWS,CW,CH,hu,hv,vy,visible=true,last=0,still=false,blinkAt=-1e9,nextBlink=t0+3000,interest=0,squint=0,look=null,wander={x:0,y:0,next:0};
   function size(){
     const r=cv.getBoundingClientRect();W=Math.max(1,r.width);H=Math.max(1,r.height);dpr=Math.min(devicePixelRatio||1,2);
     cv.width=W*dpr;cv.height=H*dpr;
     COLS=pixel?Math.round(W/2):Math.max(48,Math.min(220,Math.floor(W/7)));CW=W/COLS;CH=pixel?CW:CW*1.8;ROWS=Math.ceil(H/CH);
     hu=Math.max(.36/fill,.22/fill*W/H);hv=hu*H/W;vy=.035-(1-2*cy)*hv;
   }
-  size();new ResizeObserver(size).observe(cv);
+  size();new ResizeObserver(()=>{size();still=false}).observe(cv);
+  /* calm mode (Calm button or reduced-motion): the eye is drawn once, open and looking ahead, and then left still */
+  const calm=()=>document.documentElement.classList.contains('calm');
+  document.addEventListener('cd:calm',()=>{still=false});
   new IntersectionObserver(es=>{visible=es[0].isIntersecting}).observe(cv);
   function frame(){
     requestAnimationFrame(frame);const now=performance.now();
     if(!visible||document.body.classList.contains('intro-on')||now-last<33)return;
+    const quiet=calm();if(quiet&&still)return;still=quiet;
     const dt=Math.min(.1,(now-last)/1000);last=now;
     /* where to look: a pinned target, else the pointer, else wander after 4s idle */
     const r=cv.getBoundingClientRect(),ex=r.left+W/2,ey=r.top+H*cy;let tx,ty;
-    if(look){tx=look.x;ty=look.y}
+    if(quiet){tx=ex;ty=ey}
+    else if(look){tx=look.x;ty=look.y}
     else if(now-ptr.t<4000){tx=ptr.x;ty=ptr.y}
     else{if(now>wander.next){wander={x:ex+(Math.random()-.5)*innerWidth,y:ey+(Math.random()-.5)*innerHeight*.6,next:now+1200+Math.random()*2200}}tx=wander.x;ty=wander.y}
-    const gx=cl((tx-ex)/(innerWidth*.45),-1,1)*.11,gy=-cl((ty-ey)/(innerHeight*.45),-1,1)*.05,k=Math.min(1,dt*10);
-    S.gx+=(gx-S.gx)*k;S.gy+=(gy-S.gy)*k;S.pd+=(interest-S.pd)*Math.min(1,dt*6);
-    if(now>nextBlink){blinkAt=now;nextBlink=now+2500+Math.random()*4500}
-    let ou=ss(0,1,(now-t0)/1100)*(1-.45*squint);
+    const gx=cl((tx-ex)/(innerWidth*.45),-1,1)*.11,gy=-cl((ty-ey)/(innerHeight*.45),-1,1)*.05,k=quiet?1:Math.min(1,dt*10);
+    S.gx+=(gx-S.gx)*k;S.gy+=(gy-S.gy)*k;S.pd+=(interest-S.pd)*(quiet?1:Math.min(1,dt*6));
+    if(!quiet&&now>nextBlink){blinkAt=now;nextBlink=now+2500+Math.random()*4500}
+    let ou=(quiet?1:ss(0,1,(now-t0)/1100))*(1-.45*squint);
     const bd=(now-blinkAt)/1000;if(bd>=0&&bd<=.3)ou=Math.min(ou,Math.max(.02,1-.98*Math.sin(bd/.3*Math.PI)));
     S.ou=ou;
     ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
     if(!pixel){ctx.font=`bold ${(CH*.95).toFixed(1)}px "Courier New",Consolas,monospace`;ctx.textBaseline='alphabetic'}
-    const tick=(now/120)|0;
+    const tick=quiet?0:(now/120)|0;
     for(let row=0;row<ROWS;row++)for(let c=0;c<COLS;c++){
       const u=((c+.5)/COLS*2-1)*hu,v=(1-(row+.5)/ROWS*2)*hv+vy;
       /* vignette so the skin fades out around the eye instead of filling the page */

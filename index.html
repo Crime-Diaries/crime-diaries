@@ -13,7 +13,8 @@
 
 <header class="nav"><div class="wrap">
   <a class="brand" href="index.html" aria-label="Crime Diaries home"><canvas id="mini-eye" aria-hidden="true"></canvas>CRIME DIARIES</a>
-  <nav><a href="#cases">Cases</a><a href="#forensics">Forensics</a><a href="#community">Community</a></nav>
+  <nav aria-label="Main"><a href="index.html#cases" aria-current="page">Cases</a><a href="library.html">Library</a><a href="map.html">Map</a><a href="lab.html">Lab</a><a href="about.html">About</a></nav>
+  <button class="ghost" id="calm" aria-pressed="false" title="Turn animation off">Calm</button>
   <button class="ghost" id="replay">Replay intro</button>
 </div></header>
 
@@ -30,7 +31,7 @@
 
 <section class="block" id="cases"><div class="wrap">
   <div class="sec-head">
-    <div><h2>CASE FILES</h2><p>Famous cases from around the world, solved and unsolved.</p></div>
+    <div><h2>CASE FILES</h2><p>Reviewed case files: checked against their sources by Crime Diaries.</p></div>
     <div class="filters">
       <select id="f-country" aria-label="Country"></select>
       <select id="f-decade" aria-label="Decade"></select>
@@ -42,9 +43,25 @@
   <div class="grid" id="grid"></div>
 </div></section>
 
+<section class="block" id="library"><div class="wrap">
+  <div class="sec-head"><div><h2>THE LIBRARY</h2><p id="lib-line">More cases from Wikipedia and Wikidata, imported automatically and refreshed every night.</p></div>
+    <div class="filters"><a class="ghost btn" href="library.html">Browse the library ›</a><a class="ghost btn" href="map.html">Open the map ›</a></div></div>
+  <div class="lib-types" id="lib-types"></div>
+  <div class="lib-grid" id="lib-pick"></div>
+</div></section>
+
 <section class="block" id="forensics"><div class="wrap">
-  <div class="sec-head"><div><h2>FORENSICS</h2><p>The science that cracked these cases, and the cases each method touched.</p></div></div>
+  <div class="sec-head"><div><h2>FORENSICS</h2><p>The science that cracked these cases, and the cases each method touched.</p></div>
+    <div class="filters"><a class="ghost btn" href="lab.html">Try it in the Lab ›</a></div></div>
   <div class="fgrid" id="fgrid"></div>
+</div></section>
+
+<section class="block" id="live"><div class="wrap">
+  <div class="sec-head"><div><h2>LIVE: CRIME IN NUMBERS</h2><p>Real, current police data for one square mile around a city centre. Most crimes never reach a court: the outcomes show why investigation matters.</p></div>
+    <div class="filters"><select id="live-city" aria-label="City"></select></div></div>
+  <p class="count" id="live-status" aria-live="polite">Live data loads when you scroll here.</p>
+  <div class="live-grid"><figure class="bars" id="live-cat"></figure><figure class="bars" id="live-out"></figure></div>
+  <p class="src">Source: <a href="https://data.police.uk/" target="_blank" rel="noopener">data.police.uk</a>, Open Government Licence v3.0. Covers England, Wales and Northern Ireland, not Scotland. Police publish street locations only approximately, to protect privacy; we show totals only.</p>
 </div></section>
 
 <section class="block" id="community"><div class="wrap">
@@ -57,12 +74,19 @@
 </div></section>
 </main>
 
-<footer><div class="wrap">Crime Diaries prototype. Case summaries are original text; sources are listed on each case. Content on this site is about real people: treat it with care.</div></footer>
+<footer><div class="wrap">
+  <p class="disclaimer"><b>For education only.</b> Crime Diaries documents real cases to show how crimes are investigated and how evidence works. We do not promote, glorify or condone violence or any crime. Our case files never describe how to commit a crime or show how a victim died. Behind every case are real victims and families. <a href="about.html">Our principles</a></p>
+  <p>If you are in danger, or thinking of harming yourself or someone else, contact your local emergency number now.</p>
+</div></footer>
 
 <script src="data/cases.js"></script>
+<script src="data/library.js"></script>
 <script src="js/eye.js"></script>
+<script src="js/chrome.js"></script>
+<script src="js/translate.js"></script>
 <script src="js/intro.js"></script>
 <script src="js/site.js"></script>
 <script src="js/ask.js"></script>
+<script src="js/live.js"></script>
 </body>
 </html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Forensics Lab · Crime Diaries</title>
+<meta name="description" content="Try the methods investigators use: break a cipher, compare fingerprints and read a DNA profile. Every sample is invented.">
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Cinzel:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/lab.css">
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="index.html" aria-label="Crime Diaries home"><canvas id="mini-eye" aria-hidden="true"></canvas>CRIME DIARIES</a>
+  <nav aria-label="Main"><a href="index.html#cases">Cases</a><a href="library.html">Library</a><a href="map.html">Map</a><a href="lab.html" aria-current="page">Lab</a><a href="about.html">About</a></nav>
+  <button class="ghost" id="calm" aria-pressed="false" title="Turn animation off">Calm</button>
+  <button class="ghost" id="replay">Replay intro</button>
+</div></header>
+
+<main class="wrap lab">
+  <div class="lab-head">
+    <p class="kicker">Hands-on forensics</p>
+    <h1>FORENSICS LAB</h1>
+    <p class="lab-sub">Try the methods investigators use. Every sample here is invented; no real person's data is used.</p>
+    <nav class="lab-jump" aria-label="Lab stations"><a href="#cipher">01 · Cipher room</a><a href="#prints">02 · Print comparison</a><a href="#dna">03 · DNA lab</a></nav>
+  </div>
+
+  <!-- Station 1: cryptanalysis -->
+  <section class="station" id="cipher" aria-labelledby="cipher-h">
+    <span class="st-no">STATION 01 · CRYPTANALYSIS</span>
+    <h2 id="cipher-h">Cipher room</h2>
+    <p class="st-intro"><b>What investigators do.</b> When a message is written in code, analysts hunt for patterns. In English a few letters (E, T, A, O) turn up far more often than the rest, and a simple shift cipher keeps that pattern: it only moves it along the alphabet. Line the message's letter counts up with normal English and the key often falls out.</p>
+    <div class="cipher-box">
+      <p class="cipher-label">Intercepted message</p>
+      <p class="cipher-text" id="c-text"></p>
+      <p class="cipher-label">Your decoding · shift <span id="c-shiftv">0</span></p>
+      <p class="cipher-plain" id="c-plain"></p>
+      <canvas id="c-chart" role="img" aria-label="Letter frequency chart"></canvas>
+      <div class="c-controls">
+        <button class="lab-btn" id="c-prev" aria-label="Shift back by one letter">‹</button>
+        <label class="sr-only" for="c-shift">Shift each letter back by</label>
+        <input type="range" id="c-shift" min="0" max="25" step="1" value="0">
+        <button class="lab-btn" id="c-next" aria-label="Shift forward by one letter">›</button>
+      </div>
+      <div class="lab-row"><button class="ghost" id="c-hint">Hint</button><button class="ghost" id="c-new">New cipher</button></div>
+    </div>
+    <p class="st-result" id="c-result" aria-live="polite"></p>
+    <aside class="limits" aria-label="Limits of frequency analysis">
+      <h3>Limits of the method</h3>
+      <p>Frequency analysis needs enough text: in a short message the counts are too few to trust. Ciphers that use several symbols for the same letter (homophonic ciphers) flatten the pattern on purpose. The Zodiac's 340-character cipher worked that way and was solved only in 2020, by volunteers using computer search.</p>
+      <p><a href="case.html?id=zodiac-killer">Read the Zodiac case file</a></p>
+    </aside>
+  </section>
+
+  <!-- Station 2: fingerprints -->
+  <section class="station" id="prints" aria-labelledby="prints-h">
+    <span class="st-no">STATION 02 · FINGERPRINTS</span>
+    <h2 id="prints-h">Print comparison</h2>
+    <p class="st-intro"><b>What investigators do.</b> Examiners compare a latent print (a partial, often smudged mark left on a surface) with known prints on file. They follow the overall ridge flow first, then compare minutiae: the points where a ridge ends or forks. Position, type and direction all have to agree.</p>
+    <div class="fp-wrap">
+      <figure class="fp-latent">
+        <canvas id="fp-latent" role="img" aria-label="Latent print: a partial mark, turned and smudged"></canvas>
+        <figcaption>LATENT PRINT · <span id="fp-seed"></span></figcaption>
+      </figure>
+      <div class="fp-refs" id="fp-refs" role="group" aria-label="Reference prints on file"></div>
+    </div>
+    <div class="lab-row">
+      <label class="lab-check"><input type="checkbox" id="fp-min"> Show minutiae</label>
+      <span class="fp-legend" aria-hidden="true">○ ridge ending · □ fork</span>
+      <button class="ghost" id="fp-new">New sample</button>
+    </div>
+    <p class="st-result" id="fp-result" aria-live="polite"></p>
+    <aside class="limits" aria-label="Limits of fingerprint comparison">
+      <h3>Limits of the method</h3>
+      <p>Real latent prints are partial and distorted, so the examiner judges how much agreement is enough; many countries no longer use a fixed number of points. That judgement can fail. In 2004 the FBI wrongly matched a print from the Madrid train bombings to Oregon lawyer Brandon Mayfield. Spanish police matched it to someone else, and the FBI later apologised.</p>
+      <p>A common safeguard is verification by a second examiner who does not know the first result.</p>
+      <p><a href="index.html#f-fingerprints">Fingerprints in the case archive</a></p>
+    </aside>
+  </section>
+
+  <!-- Station 3: DNA -->
+  <section class="station" id="dna" aria-labelledby="dna-h">
+    <span class="st-no">STATION 03 · DNA PROFILING</span>
+    <h2 id="dna-h">DNA lab</h2>
+    <p class="st-intro"><b>What investigators do.</b> DNA profiling compares short tandem repeats (STRs): places in the genome where a short sequence repeats a different number of times in different people. Everyone carries two versions (alleles) at each place, one from each parent. The lab reads the repeat counts as peaks on an electropherogram and compares the profile from a scene sample with reference samples. Real casework uses 20 or more places (loci); this lab uses 4.</p>
+    <div class="dna">
+      <div class="dna-loci" id="dna-loci" aria-hidden="true"></div>
+      <div class="dna-scene">
+        <div class="dna-name"><span>SCENE SAMPLE</span><em>Swab 01 · single source</em></div>
+        <canvas id="dna-scene" role="img" aria-label="Scene sample profile"></canvas>
+      </div>
+      <div class="dna-lanes" id="dna-lanes" role="group" aria-label="Reference samples: select one to compare"></div>
+    </div>
+    <div class="lab-row">
+      <button class="go" id="dna-call" disabled>CALL IT A MATCH</button>
+      <button class="ghost" id="dna-new">New sample</button>
+    </div>
+    <p class="st-result" id="dna-result" aria-live="polite"></p>
+    <div class="dna-explain" id="dna-explain" hidden></div>
+    <aside class="limits" aria-label="Limits of DNA profiling">
+      <h3>Limits of the method</h3>
+      <p>A clean sample from one person is the easy case. Mixtures of several people and very small (low-template) samples are hard to interpret, and analysts can disagree about them. A match says whose DNA it may be, not how or when it got there: DNA can move through touch and shared objects. Close relatives also share many alleles.</p>
+      <p><a href="https://www.nist.gov/feature-stories/dna-mixtures-forensic-science-explainer" target="_blank" rel="noopener">NIST: DNA mixtures, a forensic science explainer</a> · <a href="case.html?id=colin-pitchfork">The Narborough murders: the first murder conviction based on DNA profiling</a></p>
+    </aside>
+  </section>
+</main>
+
+<footer><div class="wrap">
+  <p class="disclaimer"><b>For education only.</b> Crime Diaries documents real cases to show how crimes are investigated and how evidence works. We do not promote, glorify or condone violence or any crime. Our case files never describe how to commit a crime or show how a victim died. Behind every case are real victims and families. <a href="about.html">Our principles</a></p>
+  <p>If you are in danger, or thinking of harming yourself or someone else, contact your local emergency number now.</p>
+</div></footer>
+
+<script src="js/eye.js"></script>
+<script src="js/chrome.js"></script>
+<script src="js/translate.js"></script>
+<script src="js/lab.js"></script>
+</body>
+</html>

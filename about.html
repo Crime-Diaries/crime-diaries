@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Our principles · Crime Diaries</title>
+<meta name="description" content="Why Crime Diaries exists, what we publish, what we never publish, and where our data comes from.">
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Cinzel:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="index.html" aria-label="Crime Diaries home"><canvas id="mini-eye" aria-hidden="true"></canvas>CRIME DIARIES</a>
+  <nav aria-label="Main"><a href="index.html#cases">Cases</a><a href="library.html">Library</a><a href="map.html">Map</a><a href="lab.html">Lab</a><a href="about.html" aria-current="page">About</a></nav>
+  <button class="ghost" id="calm" aria-pressed="false" title="Turn animation off">Calm</button>
+  <button class="ghost" id="replay">Replay intro</button>
+</div></header>
+
+<main class="wrap page about">
+  <p class="kicker">About Crime Diaries</p>
+  <h1 class="page-h">OUR PRINCIPLES</h1>
+
+  <section class="principle big" id="disclaimer">
+    <h2>For education only</h2>
+    <p>Crime Diaries documents real cases to show how crimes are investigated and how evidence works. <b>We do not promote, glorify or condone violence or any crime.</b> Nothing here is a guide, a model or an invitation. If any part of this site ever reads that way, it is a mistake: tell us and we will fix it.</p>
+  </section>
+
+  <section class="principle">
+    <h2>What we write about</h2>
+    <ul>
+      <li>How a case was investigated: the evidence, the forensic methods and where they fell short.</li>
+      <li>What courts actually decided, kept apart from what police alleged and from what people speculate.</li>
+      <li>The victims as people, not as props for a story.</li>
+    </ul>
+  </section>
+
+  <section class="principle">
+    <h2>What we never publish</h2>
+    <ul>
+      <li>How to commit a crime, avoid detection or obtain weapons or poisons.</li>
+      <li>How a victim died, crime-scene or autopsy images, or any graphic image.</li>
+      <li>Attention for offenders: no fan pages, rankings, merchandise or "most notorious" lists.</li>
+      <li>A living person named as guilty without a court conviction.</li>
+      <li>Private addresses, contact details or anything that helps someone find a victim, a family or a witness.</li>
+    </ul>
+  </section>
+
+  <section class="principle" id="library">
+    <h2>How the library is built</h2>
+    <p>Every night a small program asks <a href="https://www.wikidata.org/" target="_blank" rel="noopener">Wikidata</a> for crime cases that have a Wikipedia article in any language, and updates the library. When a case has no English article, we link the one in its own language, with a translated version one click away. No server runs all the time: GitHub runs the job and hosts the result.</p>
+    <ul>
+      <li><b>Only older events.</b> Cases that ended less than 10 years ago are left out. This avoids most active trials, but not all: cold cases can reach court decades later.</li>
+      <li><b>Sensitive cases, behind a warning.</b> Terror attacks, massacres, riots, mass killings and lynchings are part of the record, so they are in the library, but hidden unless you turn on "Include sensitive cases". Each one opens only after you read a content warning and our guidelines and agree to them. On these pages, sections about the attacker, their motives or how the attack was carried out stay closed: detailed coverage of attackers is linked to copycat attacks, so we follow the "No Notoriety" practice and do not give them the attention they wanted.</li>
+      <li><b>We add no offender data.</b> Titles and short descriptions come from Wikidata and may still name people. Locations are the town or area only.</li>
+      <li><b>Protected cases: victims are never identified.</b> Cases of sexual violence, and cases in India involving a child, are included behind the same warning, but their pages are protected. Many countries make it a crime to identify such a victim, even indirectly and whatever the reader agreed to (in India, BNS section 72 and the Juvenile Justice Act, section 74; in the UK, the Sexual Offences (Amendment) Act 1992). So these pages show a neutral title, the year and the country, people a court convicted (only adults, only where Wikidata records the conviction), and what the courts and lawmakers did, with every other personal name removed automatically. There is no place below the country, no image and no full article: the Wikipedia article is linked instead.</li>
+      <li><b>More countries.</b> Besides Wikidata, the build reads Wikipedia's crime categories for every country, so cases that Wikidata has not labelled still appear. Each country can add at most 250 cases this way, so large countries do not crowd out small ones.</li>
+      <li><b>Not reviewed.</b> Library entries are labelled as imported. Each one shows the full Wikipedia article on our page, fetched live, split into sections, with reference lists left out. Sections that may describe how a victim died are collapsed behind a warning; in articles not in English, every section after the introduction is collapsed, because our check cannot read them. We have not checked this text.</li>
+      <li><b>Images.</b> Only freely licensed files from Wikimedia Commons, never "fair use" pictures. We leave out portraits of people, offenders, children, weapons, crime scenes and anything that suggests injury or death. Images stay hidden until you choose to see them. The choice is automatic and can be wrong: report any image that should not be there.</li>
+    </ul>
+  </section>
+
+  <section class="principle">
+    <h2>Sources and licences</h2>
+    <ul>
+      <li>Reviewed case files: original text written from the sources listed on each file.</li>
+      <li>Library index: Wikidata, <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener">CC0</a>.</li>
+      <li>Library reports: Wikipedia contributors (every language edition), <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>, fetched live and linked on each entry.</li>
+      <li>Images: Wikimedia Commons, each shown with its author and licence (public domain or Creative Commons).</li>
+      <li>Live crime numbers: <a href="https://data.police.uk/" target="_blank" rel="noopener">data.police.uk</a>, <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener">Open Government Licence v3.0</a>. We show totals only, never locations.</li>
+      <li>Globe: <a href="https://cesium.com/platform/cesiumjs/" target="_blank" rel="noopener">CesiumJS</a> (Apache 2.0). Imagery: NASA Earth Observatory and NASA GIBS (Black Marble, Blue Marble). Street view and flat map: © OpenStreetMap contributors (ODbL). Country outlines: Natural Earth (public domain).</li>
+      <li>Homicide rates by country: <a href="https://data.worldbank.org/indicator/VC.IHR.PSRC.P5" target="_blank" rel="noopener">World Bank</a> (CC BY 4.0), fetched live. The figures come from UNODC, whose own terms are non-commercial; we use them for education and will settle that before any commercial use. Countries record homicides differently, so rates are not a ranking of places or people.</li>
+    </ul>
+  </section>
+
+  <section class="principle">
+    <h2>Report a problem or ask for removal</h2>
+    <p>Found an error, an outdated outcome, or something harmful? <a href="https://github.com/preetsaini2004/crime-diaries/issues/new" target="_blank" rel="noopener">Open a report</a>. If you are a victim or a member of a victim's family and want something changed or removed, contact the maintainers privately through <a href="https://github.com/preetsaini2004" target="_blank" rel="noopener">their GitHub profile</a>; you do not have to explain why.</p>
+  </section>
+
+  <section class="principle help" id="help">
+    <h2>If this content affects you</h2>
+    <p>If you are in danger, or thinking of harming yourself or someone else, call your local emergency number now.</p>
+    <ul>
+      <li>United States: call or text <b>988</b> (Suicide &amp; Crisis Lifeline). Victims of crime: VictimConnect <b>1-855-484-2846</b>.</li>
+      <li>United Kingdom and Ireland: Samaritans <b>116 123</b>. Victims of crime (England and Wales): Victim Support <b>08 08 16 89 111</b>.</li>
+      <li>Elsewhere: <a href="https://findahelpline.com/" target="_blank" rel="noopener">findahelpline.com</a> lists free, confidential helplines by country.</li>
+    </ul>
+  </section>
+</main>
+
+<footer><div class="wrap">
+  <p class="disclaimer"><b>For education only.</b> Crime Diaries documents real cases to show how crimes are investigated and how evidence works. We do not promote, glorify or condone violence or any crime. Our case files never describe how to commit a crime or show how a victim died. Behind every case are real victims and families. <a href="about.html">Our principles</a></p>
+  <p>If you are in danger, or thinking of harming yourself or someone else, contact your local emergency number now.</p>
+</div></footer>
+
+<script src="js/eye.js"></script>
+<script src="js/chrome.js"></script>
+<script src="js/translate.js"></script>
+</body>
+</html>

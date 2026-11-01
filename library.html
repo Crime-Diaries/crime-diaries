@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Library · Crime Diaries</title>
+<meta name="description" content="An open index of historical crime cases from Wikipedia and Wikidata.">
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Cinzel:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="index.html" aria-label="Crime Diaries home"><canvas id="mini-eye" aria-hidden="true"></canvas>CRIME DIARIES</a>
+  <nav aria-label="Main"><a href="index.html#cases">Cases</a><a href="library.html" aria-current="page">Library</a><a href="map.html">Map</a><a href="lab.html">Lab</a><a href="about.html">About</a></nav>
+  <button class="ghost" id="calm" aria-pressed="false" title="Turn animation off">Calm</button>
+  <button class="ghost" id="replay">Replay intro</button>
+</div></header>
+
+<main class="wrap page">
+  <p class="kicker">The open library</p>
+  <h1 class="page-h">THE LIBRARY</h1>
+  <p class="page-sub" id="lib-intro"></p>
+  <div class="notice imported"><b>Imported, not reviewed.</b> Entries come automatically from Wikidata and Wikipedia. We include only events at least 10 years old, and leave out mass-casualty attacks on purpose. <a href="about.html#library">How the library is built</a></div>
+  <form class="lib-tools" id="lib-form" role="search" onsubmit="return false">
+    <input id="lib-q" type="search" placeholder="Search title, place, description…" aria-label="Search the library" autocomplete="off">
+    <select id="lib-type" aria-label="Type"></select>
+    <select id="lib-era" aria-label="Period"></select>
+    <select id="lib-country" aria-label="Country"></select>
+    <select id="lib-sort" aria-label="Sort"><option value="old">Oldest first</option><option value="new">Newest first</option><option value="az">A to Z</option></select>
+    <label class="lib-chk"><input type="checkbox" id="lib-uns"> Unsolved only</label>
+    <label class="lib-chk sens-chk" title="Terror attacks, massacres, riots, sexual violence and other sensitive cases. Each opens behind a content warning."><input type="checkbox" id="lib-sens"> Include sensitive cases</label>
+  </form>
+  <p class="count" id="lib-count" aria-live="polite"></p>
+  <div class="lib-grid" id="lib-list"></div>
+  <p class="more"><button class="ghost" id="lib-more" hidden>Show more</button></p>
+</main>
+
+<footer><div class="wrap">
+  <p class="disclaimer"><b>For education only.</b> Crime Diaries documents real cases to show how crimes are investigated and how evidence works. We do not promote, glorify or condone violence or any crime. Our case files never describe how to commit a crime or show how a victim died. Behind every case are real victims and families. <a href="about.html">Our principles</a></p>
+  <p>If you are in danger, or thinking of harming yourself or someone else, contact your local emergency number now.</p>
+</div></footer>
+
+<script src="data/cases.js"></script>
+<script src="data/library.js"></script>
+<script src="js/eye.js"></script>
+<script src="js/chrome.js"></script>
+<script src="js/translate.js"></script>
+<script src="js/library.js"></script>
+</body>
+</html>
