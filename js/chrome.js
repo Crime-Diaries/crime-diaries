@@ -61,7 +61,7 @@ function gate(cb,opt={}){
 }
 /* pages without their own intro logic just show the notice */
 const own=$('intro');
-if(!own&&!/about\.html$/.test(location.pathname))gate(()=>{});
+if(!own&&!/(about|privacy|terms|credits|account)\.html$/.test(location.pathname))gate(()=>{}); /* legal and account pages stay readable */
 
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 /* Wikidata years are astronomical: 0 is 1 BCE, -43 is 44 BCE */

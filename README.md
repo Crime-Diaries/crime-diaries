@@ -1,14 +1,55 @@
-# Crime Diaries
+<p align="center"><img src="docs/readme/banner.jpg" alt="Crime Diaries: the open library of crime and forensics" width="100%"></p>
 
-An open library of real crime cases and forensics, for education only, with a cinematic ASCII intro and a watching eye that follows your cursor.
+<p align="center">
+  <b>An open, community library of real crime cases and the forensic science that solved them.</b><br>
+  For education only. Built with respect for victims.
+</p>
 
-Plain HTML, CSS and JavaScript. No build step and no server: the library is refreshed nightly by a GitHub Action, and live numbers are fetched by the browser from public APIs.
+<p align="center">
+  <img alt="Cases" src="https://img.shields.io/badge/cases-10%2C600%2B-d4101f?style=for-the-badge&labelColor=060405">
+  <img alt="Countries" src="https://img.shields.io/badge/countries-140%2B-d4101f?style=for-the-badge&labelColor=060405">
+  <img alt="Languages" src="https://img.shields.io/badge/Wikipedia%20languages-71-d4101f?style=for-the-badge&labelColor=060405">
+  <img alt="Servers" src="https://img.shields.io/badge/servers-0-f2c400?style=for-the-badge&labelColor=060405">
+</p>
+
+<p align="center">
+  <a href="#run-it">Run it</a> ·
+  <a href="#whats-where">What's where</a> ·
+  <a href="about.html">Principles</a> ·
+  <a href="privacy.html">Privacy</a> ·
+  <a href="terms.html">Terms</a> ·
+  <a href="credits.html">Credits</a>
+</p>
+
+---
+
+<p align="center"><img src="docs/readme/globe.gif" alt="The God's-eye globe: every case with a known town, on NASA night imagery" width="720"></p>
+
+## What's inside
+
+| | |
+|---|---|
+| <img src="docs/readme/casefile.jpg" alt="A reviewed case file" width="420"> | **Hand-reviewed case files.** Timeline, forensics, outcome and free-licensed images, every fact checked against its source. |
+| <img src="docs/readme/library.jpg" alt="The library, filtered to Japan" width="420"> | **The open library.** Thousands of cases indexed from Wikidata and Wikipedia in 71 languages, with full reports read on the site and a built-in translation guide. |
+| <img src="docs/readme/globe.jpg" alt="The globe" width="420"> | **God's-eye globe.** Every case with a known town on NASA imagery: fly, filter, switch to night vision, open any file. |
+| <img src="docs/readme/lab.jpg" alt="The forensics lab" width="420"> | **Forensics lab.** Try the methods investigators use: codebreaking, fingerprint comparison, DNA profiling. |
+| <img src="docs/readme/warning.jpg" alt="The content warning" width="420"> | **Responsible by design.** Sensitive cases open behind a content warning; attackers get no spotlight; victims of sexual violence are never named; recent cases are held back. |
+
+## How it runs
+
+```
+Open data  ──►  Nightly build  ──►  Static site
+Wikidata · Wikipedia      GitHub Actions          no database,
+Commons · NASA            (no server)             no servers
+```
+
+Plain HTML, CSS and JavaScript. No build step for the site and no server: the library is rebuilt from open data by a GitHub Action, and live numbers are fetched by the browser from public APIs. Accounts (optional) use Supabase; see [`supabase/SETUP.md`](supabase/SETUP.md).
 
 ## Run it
 
 ```bash
 cd crime-diaries
-python3 -m http.server 8000
+python3 -m http.server 8000   # Windows: py -m http.server 8000
 ```
 
 Open http://localhost:8000. A first visit shows the education-only notice; the intro plays only if the visitor chooses it there, or later with **Replay intro**. **Calm** (top right) turns animation off; it is on by default for people whose system asks for reduced motion.
@@ -27,12 +68,19 @@ Use the server rather than double-clicking `index.html`: browsers won't let a pa
 | `js/globe.js` | The globe. `map.html?debug` exposes the viewer as `window.__globe` for testing |
 | `lab.html` | Forensics Lab: cipher, fingerprint and DNA mini-games with invented data |
 | `about.html` | Our principles: disclaimer, what we never publish, sources and licences, help lines |
+| `account.html` | Sign in, create an account (18+, accept terms), download or delete your data |
+| `privacy.html`, `terms.html`, `credits.html` | Privacy policy, terms of use, credits and licences |
 | `data/cases.js` | The reviewed case files and forensic methods |
 | `data/library.js` | Generated library index. Do not edit by hand |
 | `scripts/build-library.mjs` | Builds `data/library.js` from Wikidata (`node scripts/build-library.mjs`, Node 18+) |
 | `.github/workflows/library.yml` | Runs the build every night at 03:17 UTC and commits changes |
 | `js/chrome.js` | Shared on every page: notice, Calm mode, nav eye, Replay, helpers (`window.CD`) |
 | `js/report.js` | Full report on library pages: the Wikipedia article section by section, fact box, collapsed violent passages, safe image gallery |
+| `js/config.js` | Site settings: Supabase URL and anon key (empty = accounts off), document versions, contact email |
+| `js/auth.js` | Account link and legal links on every page; sends a signed-in user who has not accepted the current terms to the account page |
+| `js/account.js` | The account page |
+| `supabase/` | `schema.sql` (database rules) and `SETUP.md` (how to turn accounts on) |
+| `css/fonts.css`, `fonts/`, `vendor/` | Self-hosted fonts and the Supabase library, with their licences |
 | `js/sensitive.js` | Content warning for sensitive cases, and the protected page for sexual-violence and child cases |
 | `data/sensitive.js` | Generated sensitive cases. Do not edit by hand |
 | `js/translate.js` | The A文 nav button: animated guide to the browser's own translator, and in-page translation (Chrome 138+) on reports |

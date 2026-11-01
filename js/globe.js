@@ -48,6 +48,8 @@ try{
 }catch(err){return flat('The 3D globe could not start on this device.')}
 const scene=viewer.scene,cam=viewer.camera,redraw=()=>scene.requestRender();
 if(/[?&]debug/.test(location.search))window.__globe=viewer; /* for testing: map.html?debug */
+/* the library adds its logo without alt text, after the first frame */
+const altOff=viewer.scene.postRender.addEventListener(()=>{const im=viewer.cesiumWidget.creditContainer.querySelectorAll('img');if(!im.length)return;im.forEach(i=>{if(!i.alt)i.alt='Cesium'});altOff()});
 /* render-on-demand misses work finished in the background (surface shapes), so keep redrawing for a few seconds */
 const pulse=(ms=1500)=>{const t0=performance.now();const go=()=>{redraw();const t=performance.now()-t0;
   if(t<ms||(!viewer.dataSourceDisplay.ready&&t<30000))setTimeout(go,150)};go()};

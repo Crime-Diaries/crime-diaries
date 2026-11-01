@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Our principles · Crime Diaries</title>
 <meta name="description" content="Why Crime Diaries exists, what we publish, what we never publish, and where our data comes from.">
-<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Cinzel:wght@700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="css/fonts.css" rel="stylesheet">
 <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
@@ -47,7 +47,7 @@
 
   <section class="principle" id="library">
     <h2>How the library is built</h2>
-    <p>Every night a small program asks <a href="https://www.wikidata.org/" target="_blank" rel="noopener">Wikidata</a> for crime cases that have a Wikipedia article in any language, and updates the library. When a case has no English article, we link the one in its own language, with a translated version one click away. No server runs all the time: GitHub runs the job and hosts the result.</p>
+    <p>A small program, built to run every night on GitHub, asks <a href="https://www.wikidata.org/" target="_blank" rel="noopener">Wikidata</a> for crime cases that have a Wikipedia article in any language, and updates the library. When a case has no English article, we link the one in its own language, with a translated version one click away. No server runs all the time. The page shows the date of the last update.</p>
     <ul>
       <li><b>Only older events.</b> Cases that ended less than 10 years ago are left out. This avoids most active trials, but not all: cold cases can reach court decades later.</li>
       <li><b>Sensitive cases, behind a warning.</b> Terror attacks, massacres, riots, mass killings and lynchings are part of the record, so they are in the library, but hidden unless you turn on "Include sensitive cases". Each one opens only after you read a content warning and our guidelines and agree to them. On these pages, sections about the attacker, their motives or how the attack was carried out stay closed: detailed coverage of attackers is linked to copycat attacks, so we follow the "No Notoriety" practice and do not give them the attention they wanted.</li>
@@ -61,6 +61,7 @@
 
   <section class="principle">
     <h2>Sources and licences</h2>
+    <p>The full list, with software and fonts, is on the <a href="credits.html">credits page</a>.</p>
     <ul>
       <li>Reviewed case files: original text written from the sources listed on each file.</li>
       <li>Library index: Wikidata, <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener">CC0</a>.</li>
@@ -72,9 +73,10 @@
     </ul>
   </section>
 
-  <section class="principle">
+  <section class="principle" id="contact">
     <h2>Report a problem or ask for removal</h2>
     <p>Found an error, an outdated outcome, or something harmful? <a href="https://github.com/preetsaini2004/crime-diaries/issues/new" target="_blank" rel="noopener">Open a report</a>. If you are a victim or a member of a victim's family and want something changed or removed, contact the maintainers privately through <a href="https://github.com/preetsaini2004" target="_blank" rel="noopener">their GitHub profile</a>; you do not have to explain why.</p>
+    <p><b>Contact and grievances.</b> Crime Diaries is run by <span class="cd-operator">madxxenom</span>, who also handles grievances and takedown requests: <a class="cd-email" href="#">the contact address</a>. We acknowledge a complaint within 24 hours and aim to resolve it within 15 days. For requests about your account or your personal data, see the <a href="privacy.html">privacy policy</a>.</p>
   </section>
 
   <section class="principle help" id="help">
@@ -94,7 +96,9 @@
 </div></footer>
 
 <script src="js/eye.js"></script>
+<script src="js/config.js"></script>
 <script src="js/chrome.js"></script>
+<script src="js/auth.js"></script>
 <script src="js/translate.js"></script>
 </body>
 </html>

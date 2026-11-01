@@ -68,7 +68,7 @@ if($('grid')){
   /* the library teaser: counts per type and six "cases of the day" (same six all day, new ones tomorrow) */
   if(window.LIBRARY&&$('lib-pick')){
     const L=CD.items(),by={};L.forEach(e=>by[e.k]=(by[e.k]||0)+1);
-    $('lib-line').innerHTML=`<b>${L.length.toLocaleString('en')}</b> more cases from Wikipedia and Wikidata, imported automatically and checked every night (last change ${esc(window.LIBRARY_UPDATED||'')}). These are <b>not reviewed</b> by Crime Diaries.`;
+    $('lib-line').innerHTML=`<b>${L.length.toLocaleString('en')}</b> more cases from Wikipedia and Wikidata, imported automatically (last updated ${esc(window.LIBRARY_UPDATED||'')}). These are <b>not reviewed</b> by Crime Diaries.`;
     $('lib-types').innerHTML=Object.entries(by).sort((a,b)=>b[1]-a[1]).map(([k,n])=>`<a class="chip" href="library.html?type=${encodeURIComponent(k)}">${esc(k)} <b>${n}</b></a>`).join('');
     let seed=+new Date().toISOString().slice(0,10).replace(/-/g,'');const rnd=()=>(seed=(seed*1103515245+12345)%2147483648)/2147483648;
     const pick=[];const pool=L.filter(e=>e.d);while(pick.length<6&&pool.length)pick.push(pool.splice(rnd()*pool.length|0,1)[0]);
@@ -84,7 +84,7 @@ const wd=new URLSearchParams(location.search).get('wd');
 if($('article')&&wd){(async()=>{
   const el=$('article');el.innerHTML='<p class="src">Loading…</p>';
   const e=await CD.find(wd);
-  if(!e){document.title='Case not found · Crime Diaries';el.innerHTML=`<p class="crumbs"><a href="library.html">← Library</a></p><h1>Case not found</h1><p>This entry is not in the library, or it was removed in the last nightly update.</p>`;return}
+  if(!e){document.title='Case not found · Crime Diaries';el.innerHTML=`<p class="crumbs"><a href="library.html">← Library</a></p><h1>Case not found</h1><p>This entry is not in the library, or it was removed in the last update.</p>`;return}
   if(CD.isReviewed(e)){location.replace(CD.href(e));return}
   /* copied Wikipedia text earns no search ranking, and these pages should not surface in searches for people named in them */
   const robots=document.createElement('meta');robots.name='robots';robots.content='noindex';document.head.appendChild(robots);

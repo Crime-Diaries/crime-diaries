@@ -10,7 +10,7 @@ const PAGE=48;let shown=PAGE;
 const century=y=>y<=0?'Before 1 CE':y<1500?'Before 1500':Math.floor((y-1)/100)*100+1+'–'+(Math.floor((y-1)/100)+1)*100;
 const ERAS=['Before 1 CE','Before 1500',...[...new Set(L.filter(e=>e.y>=1500).map(e=>century(e.y)))].sort()];
 
-$('lib-intro').innerHTML=`<b>${L.length.toLocaleString('en')}</b> cases indexed from Wikidata, plus <b>${R.length}</b> reviewed case files. Checked every night; last change ${esc(window.LIBRARY_UPDATED||'unknown')}.`;
+$('lib-intro').innerHTML=`<b>${L.length.toLocaleString('en')}</b> cases indexed from Wikidata, plus <b>${R.length}</b> reviewed case files. Last updated ${esc(window.LIBRARY_UPDATED||'unknown')}.`;
 const opts=(el,all,vals)=>{el.innerHTML=`<option value="">${all}</option>`+vals.map(v=>`<option>${esc(v)}</option>`).join('')};
 const count=(f)=>{const m={};L.forEach(e=>{const k=f(e);if(k)m[k]=(m[k]||0)+1});return m};
 const types=count(e=>e.k);opts($('lib-type'),'All types',Object.keys(types).sort());
