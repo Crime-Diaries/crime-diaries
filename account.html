@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Your account · Crime Diaries</title>
+<meta name="description" content="Sign in to Crime Diaries, or manage, download or delete your account.">
+<meta name="robots" content="noindex">
+<link href="css/fonts.css" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="index.html" aria-label="Crime Diaries home"><canvas id="mini-eye" aria-hidden="true"></canvas>CRIME DIARIES</a>
+  <nav aria-label="Main"><a href="index.html#cases">Cases</a><a href="library.html">Library</a><a href="map.html">Map</a><a href="lab.html">Lab</a><a href="about.html">About</a></nav>
+  <button class="ghost" id="calm" aria-pressed="false" title="Turn animation off">Calm</button>
+  <button class="ghost" id="replay">Replay intro</button>
+</div></header>
+
+<main class="wrap page acct">
+  <p class="kicker">Your account</p>
+  <h1 class="page-h">ACCOUNT</h1>
+  <div id="acct" aria-live="polite"><p class="src">Loading…</p></div>
+  <noscript><p>Accounts need JavaScript.</p></noscript>
+</main>
+
+<footer><div class="wrap">
+  <p class="disclaimer"><b>For education only.</b> Crime Diaries documents real cases to show how crimes are investigated and how evidence works. We do not promote, glorify or condone violence or any crime. <a href="about.html">Our principles</a></p>
+</div></footer>
+
+<script src="js/config.js"></script>
+<script src="js/eye.js"></script>
+<script src="js/chrome.js"></script>
+<script src="js/translate.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/account.js"></script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+/* Forensics Lab (lab.html). Uses the colour and font tokens from site.css. */
+.lab{padding:48px 0 0}
+.lab .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.lab :focus-visible{outline:2px solid var(--red2);outline-offset:2px}
+.lab-head h1{margin:8px 0 6px;font:900 clamp(28px,5vw,46px)/1.1 var(--serif);letter-spacing:.06em}
+.lab-sub{margin:0;color:var(--muted);font-size:14px;max-width:640px}
+.lab-jump{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.lab-jump a{font-size:12px;color:var(--muted);text-decoration:none;border:1px solid var(--line2);padding:6px 10px;letter-spacing:.06em}
+.lab-jump a:hover{color:var(--ink);border-color:var(--red)}
+
+/* a station */
+.station{position:relative;margin-top:36px;background:var(--panel);border:1px solid var(--line2);border-top:3px solid var(--red);padding:22px 24px 24px;scroll-margin-top:76px}
+.station .st-no{display:block;color:var(--red2);font-size:11px;letter-spacing:.2em}
+.station h2{margin:4px 0 12px;font:700 clamp(20px,3vw,26px) var(--serif);letter-spacing:.06em}
+.station .st-intro{margin:0 0 18px;font-size:13px;color:#cdbcb8;max-width:780px}
+.station .st-intro b{color:var(--ink)}
+.station canvas{display:block;width:100%}
+.station .st-result{min-height:3.2em;margin:14px 0 0;padding:10px 14px;border-left:2px solid var(--red);background:rgba(212,16,31,.06);font-size:13px}
+.station .st-result.good{border-left-color:var(--green);background:rgba(52,211,153,.07);animation:lab-pop .45s ease-out}
+.station .st-result b{color:var(--ink)}
+.station .st-result cite{color:var(--muted)}
+.station .limits{margin-top:16px;border:1px solid var(--tape);background:rgba(242,196,0,.05);padding:12px 16px;font-size:13px;color:#cdbcb8}
+.station .limits h3{margin:0 0 6px;font:700 11px var(--mono);letter-spacing:.2em;color:var(--tape);text-transform:uppercase}
+.station .limits p{margin:0 0 8px}
+.station .limits p:last-child{margin:0}
+@keyframes lab-pop{from{transform:translateY(4px);opacity:.4}to{transform:none;opacity:1}}
+
+/* shared controls */
+.lab-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+.lab-btn{flex:none;width:38px;height:34px;background:var(--panel2);border:1px solid var(--line);color:var(--ink);font:700 18px/1 var(--mono);cursor:pointer}
+.lab-btn:hover{border-color:var(--red);color:#fff}
+.lab-check{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--ink);cursor:pointer}
+.lab-check input{accent-color:var(--red);width:16px;height:16px;margin:0}
+.lab .go{background:var(--red);border:0;color:#fff;font:700 12px var(--mono);letter-spacing:.1em;padding:9px 14px;cursor:pointer}
+.lab .go:disabled,.lab .ghost:disabled{opacity:.4;cursor:not-allowed}
+
+/* station 1: cipher room */
+.cipher-box{background:var(--bg);border:1px solid var(--line);padding:16px}
+.cipher-label{margin:0 0 4px;font-size:10px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
+.cipher-text,.cipher-plain{margin:0 0 14px;font-size:clamp(13px,2.1vw,17px);line-height:1.55;letter-spacing:.1em;overflow-wrap:anywhere}
+.cipher-text{color:var(--red2)}
+.cipher-plain{color:var(--ink);min-height:1.55em}
+.cipher-plain.ok{color:var(--green)}
+#c-chart{aspect-ratio:3/1;margin-top:4px}
+.c-controls{display:flex;gap:10px;align-items:center;margin-top:10px}
+.c-controls input[type=range]{flex:1;min-width:0;accent-color:var(--red);height:28px}
+
+/* station 2: print comparison */
+.fp-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:16px;align-items:start}
+.fp-latent{margin:0}
+.fp-latent canvas{aspect-ratio:1/1;border:1px solid var(--line);background:#0d0a0b}
+.fp-latent figcaption{margin-top:6px;font-size:11px;letter-spacing:.12em;color:var(--muted)}
+.fp-refs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.fp-card{display:grid;gap:6px;padding:8px;background:var(--bg);border:1px solid var(--line2);color:var(--ink);font:12px var(--mono);letter-spacing:.1em;text-align:left;cursor:pointer;transition:border-color .2s,opacity .2s}
+.fp-card canvas{aspect-ratio:1/1}
+.fp-card:hover{border-color:var(--red)}
+.fp-card[aria-pressed="true"]{border-color:var(--red2)}
+.fp-card.wrong{opacity:.5}
+.fp-card.right{border-color:var(--green);opacity:1}
+.fp-card.right span::after{content:" · MATCH";color:var(--green)}
+.fp-card.wrong span::after{content:" · EXCLUDED";color:var(--muted)}
+.fp-legend{font-size:11px;color:var(--muted)}
+.lab-row .ghost:last-child{margin-left:auto}
+
+/* station 3: DNA lab */
+.dna{display:grid;gap:8px}
+.dna-loci{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));padding:0 11px;font-size:10px;letter-spacing:.06em;color:var(--muted)}
+.dna-loci span{text-align:center;padding-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dna-scene,.dna-lane{display:block;width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--line2);color:var(--ink);text-align:left;font:12px var(--mono)}
+.dna-scene{border-color:rgba(242,196,0,.5)}
+.dna-lanes{display:grid;gap:8px}
+.dna-lane{cursor:pointer;transition:border-color .2s,opacity .2s}
+.dna-lane:hover{border-color:var(--red)}
+.dna-lane[aria-pressed="true"]{border-color:var(--red2)}
+.dna-lane.out{opacity:.5}
+.dna-lane.right{border-color:var(--green);opacity:1}
+.dna-name{display:flex;justify-content:space-between;gap:8px;font-size:11px;letter-spacing:.12em;margin-bottom:4px}
+.dna-name em{font-style:normal;color:var(--muted);letter-spacing:.04em}
+.dna-lane.right .dna-name em{color:var(--green)}
+#dna-scene{height:84px}
+.dna-lane canvas{height:64px}
+.dna-explain{margin-top:12px;border:1px solid var(--line2);background:var(--bg);padding:12px 16px;font-size:13px;color:#cdbcb8}
+.dna-explain h3{margin:0 0 6px;font:700 15px var(--serif);letter-spacing:.06em;color:var(--ink)}
+.dna-explain p{margin:0 0 8px}
+.dna-explain p:last-child{margin:0}
+.dna-explain b{color:var(--green);font-weight:700}
+
+@media (max-width:640px){
+  .lab{padding-top:32px}
+  .station{padding:16px 14px 18px}
+  .cipher-box{padding:12px}
+  #c-chart{aspect-ratio:1.7/1}
+  .fp-wrap{grid-template-columns:minmax(0,1fr)}
+  .lab-row .ghost:last-child{margin-left:0}
+}
+
+/* calm mode and reduced motion: no transitions or animation */
+html.calm .lab *,html.calm .lab *::before,html.calm .lab *::after{transition:none!important;animation:none!important}
+@media (prefers-reduced-motion:reduce){.lab *,.lab *::before,.lab *::after{transition:none!important;animation:none!important}}

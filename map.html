@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Globe · Crime Diaries</title>
+<meta name="description" content="A 3D globe of historical crime cases around the world, with homicide rates by country.">
+<link href="css/fonts.css" rel="stylesheet">
+<script>window.CESIUM_BASE_URL="https://cdnjs.cloudflare.com/ajax/libs/cesium/1.123.0/"</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cesium/1.123.0/Widgets/widgets.min.css">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="index.html" aria-label="Crime Diaries home"><canvas id="mini-eye" aria-hidden="true"></canvas>CRIME DIARIES</a>
+  <nav aria-label="Main"><a href="index.html#cases">Cases</a><a href="library.html">Library</a><a href="map.html" aria-current="page">Map</a><a href="lab.html">Lab</a><a href="about.html">About</a></nav>
+  <button class="ghost" id="calm" aria-pressed="false" title="Turn animation off">Calm</button>
+  <button class="ghost" id="replay">Replay intro</button>
+</div></header>
+
+<main class="map-page">
+  <div class="map-bar wrap">
+    <div><h1 class="page-h">THE GLOBE</h1><p class="page-sub" id="map-count" aria-live="polite">Loading the globe…</p></div>
+    <div class="filters">
+      <input id="map-find" list="map-cases" placeholder="Find a case…" aria-label="Find a case and fly to it" autocomplete="off"><datalist id="map-cases"></datalist>
+      <select id="map-type" aria-label="Type"></select>
+      <label class="lib-chk"><input type="checkbox" id="map-rev"> Reviewed only</label>
+      <label class="lib-chk sens-chk" title="Terror attacks, massacres, riots, sexual violence and other sensitive cases. Each opens behind a content warning."><input type="checkbox" id="map-sens"> Include sensitive cases</label>
+    </div>
+  </div>
+  <div class="map-bar wrap globe-opts" id="globe-opts">
+    <label>View <select id="g-view" aria-label="Imagery"><option value="night">Night lights</option><option value="day">Day</option><option value="streets">Streets</option></select></label>
+    <label>Look <select id="g-look" aria-label="Camera look"><option value="">Normal</option><option value="nvg">Night vision</option><option value="noir">Noir</option></select></label>
+    <label class="lib-chk"><input type="checkbox" id="g-rate"> Homicide rate by country</label>
+  </div>
+  <div class="globe-wrap">
+    <div id="map" role="region" aria-label="Globe of cases. Use Find a case to fly to one with the keyboard."></div>
+    <div class="crt" aria-hidden="true"></div>
+    <div class="hud hud-tl" aria-hidden="true"><b>CRIME DIARIES</b> // GLOBAL CASE FILE<br><span id="hud-n"></span></div>
+    <div class="hud hud-tr" aria-hidden="true"><span id="hud-utc"></span></div>
+    <div class="hud hud-bl" aria-hidden="true"><span id="hud-pos"></span></div>
+    <div class="g-tip" id="g-tip" hidden></div>
+    <aside class="g-card" id="g-card" hidden aria-live="polite"></aside>
+    <div class="g-legend" id="g-legend" hidden></div>
+  </div>
+  <div class="map-time wrap">
+    <button class="ghost" id="map-play" aria-pressed="false">▶ Play history</button>
+    <label for="map-year">Up to <b id="map-yl"></b></label>
+    <input type="range" id="map-year">
+  </div>
+  <details class="wrap g-table" id="g-table" hidden><summary>Homicide rates as a table</summary><div id="g-table-body"></div></details>
+  <p class="src wrap" id="map-src">Locations are the town or area only, never a house. Imagery: NASA Earth Observatory and NASA GIBS (Black Marble, Blue Marble). Street map © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors. Globe: <a href="https://cesium.com/platform/cesiumjs/" target="_blank" rel="noopener">CesiumJS</a> (Apache 2.0). Prefer a list? <a href="library.html">Open the library</a>.</p>
+</main>
+
+<footer><div class="wrap">
+  <p class="disclaimer"><b>For education only.</b> Crime Diaries documents real cases to show how crimes are investigated and how evidence works. We do not promote, glorify or condone violence or any crime. Our case files never describe how to commit a crime or show how a victim died. Behind every case are real victims and families. <a href="about.html">Our principles</a></p>
+  <p>If you are in danger, or thinking of harming yourself or someone else, contact your local emergency number now.</p>
+</div></footer>
+
+<script src="data/cases.js"></script>
+<script src="data/library.js"></script>
+<script src="data/world.js"></script>
+<script src="js/eye.js"></script>
+<script src="js/config.js"></script>
+<script src="js/chrome.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/translate.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cesium/1.123.0/Cesium.js"></script>
+<script src="js/globe.js"></script>
+</body>
+</html>

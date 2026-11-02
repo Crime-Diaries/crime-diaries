@@ -3,3 +3,9 @@ Thumbs.db
 *.log
 node_modules/
 .env
+
+# local build cache (category crawl, drop log)
+cache/
+
+# local editor/agent tool settings
+.serena/
