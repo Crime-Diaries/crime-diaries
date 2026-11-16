@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Saved Cases · Crime Diaries</title>
+<meta name="description" content="Your saved Crime Diaries cases on this device.">
+<link href="css/fonts.css" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<header class="nav"><div class="wrap">
+  <a class="brand" href="index.html" aria-label="Crime Diaries home"><canvas id="mini-eye" aria-hidden="true"></canvas>CRIME DIARIES</a>
+  <nav aria-label="Main"><a href="index.html#cases">Cases</a><a href="library.html" aria-current="page">Library</a><a href="map.html">Map</a><a href="lab.html">Lab</a><a href="about.html">About</a></nav>
+  <button class="ghost" id="calm" aria-pressed="false" title="Turn animation off">Calm</button>
+  <button class="ghost" id="replay">Replay intro</button>
+</div></header>
+<main class="wrap page"><p class="kicker">Your personal collection</p><h1 class="page-h">SAVED CASES</h1><p class="page-sub">Cases bookmarked on this browser and device. No account needed.</p><p class="count" id="saved-total" aria-live="polite"></p><div id="saved-grid"></div><div class="notice imported"><b>Privacy:</b> Saved cases stay in this browser’s local storage. They do not sync across devices or accounts, and clearing browser data may remove them. Sensitive cases continue to require their content warnings.</div></main>
+<footer><div class="wrap">
+  <p class="disclaimer"><b>For education only.</b> Crime Diaries documents real cases to show how crimes are investigated and how evidence works. We do not promote, glorify or condone violence or any crime. Our case files never describe how to commit a crime or show how a victim died. Behind every case are real victims and families. <a href="about.html">Our principles</a></p>
+  <p>If you are in danger, or thinking of harming yourself or someone else, contact your local emergency number now.</p>
+</div></footer>
+<script src="data/cases.js"></script>
+<script src="data/library.js"></script>
+<script src="js/eye.js"></script>
+<script src="js/config.js"></script>
+<script src="js/chrome.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/translate.js"></script>
+<script src="js/favorites.js"></script>
+</body>
+</html>
