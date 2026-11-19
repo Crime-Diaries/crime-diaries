@@ -12,6 +12,8 @@
   <img alt="Servers" src="https://img.shields.io/badge/servers-0-f2c400?style=for-the-badge&labelColor=060405">
 </p>
 
+<p align="center"><b><a href="https://crime-diaries.github.io/crime-diaries/">Open the live site →</a></b></p>
+
 <p align="center">
   <a href="#run-it">Run it</a> ·
   <a href="#whats-where">What's where</a> ·
@@ -69,6 +71,7 @@ Use the server rather than double-clicking `index.html`: browsers won't let a pa
 | `lab.html` | Forensics Lab: cipher, fingerprint and DNA mini-games with invented data |
 | `about.html` | Our principles: disclaimer, what we never publish, sources and licences, help lines |
 | `account.html` | Sign in, create an account (18+, accept terms), download or delete your data |
+| `saved.html`, `js/favorites.js` | Saved cases: ☆ Save on any case card or case page, kept in this browser only (no account needed) |
 | `privacy.html`, `terms.html`, `credits.html` | Privacy policy, terms of use, credits and licences |
 | `data/cases.js` | The reviewed case files and forensic methods |
 | `data/library.js` | Generated library index. Do not edit by hand |
@@ -104,7 +107,7 @@ Use the server rather than double-clicking `index.html`: browsers won't let a pa
 - **Sensitive cases** (terror attacks, massacres, riots, mass killings, lynchings, sexual violence, and child cases in India) go to `data/sensitive.js`, loaded only when a visitor turns on "Include sensitive cases". Each opens behind a content warning (`js/sensitive.js`). Attack reports keep sections about the attacker closed ("No Notoriety"). Sexual-violence and child cases are **protected**: the build keeps only a neutral title, year, country and a location rounded to whole degrees, and the page shows convicted adults and outcome sentences with other names removed. Never add a victim's name, the article title or a place to these entries.
 - **Still left out:** cases that ended less than 10 years ago (proceedings may be active), and anything in `REMOVED`.
 - **Live in the browser:** library summaries come from the Wikipedia REST API (CC BY-SA, credited on the page); home-page numbers come from data.police.uk (England, Wales, Northern Ireland).
-- **To go live:** push to GitHub, enable Pages (Settings, Pages, deploy from `main`), and check the Actions tab can write to the repo.
+- **Live site:** GitHub Pages serves `main` from the repo root at https://crime-diaries.github.io/crime-diaries/ and redeploys on every push, including the nightly library commit. `.nojekyll` tells Pages to serve the files as they are. Keep every link relative (no leading `/`), because the site lives under `/crime-diaries/`.
 
 ## Intro clips
 
